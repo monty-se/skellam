@@ -154,6 +154,5 @@ The skellam package is licensed under the GPL (>= 2).
 
 ## Maintainers
 
-Montasser Ghachem (montasser.ghachem@pinstimation.com)
-Oguz Ersan (oguz.ersan@pinstimation.com)
-Patrick E. Brown (patrick.brown@utoronto.ca)
+Montasser Ghachem (mg@pinstimation.com)
+Oguz Ersan (oe@pinstimation.com)
