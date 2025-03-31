@@ -146,7 +146,7 @@ Skellam, J. G. (1946). The frequency distribution of the difference between two 
 
 Johnson, N. L. (1959). On an extension of the connection between Poisson and χ² distributions. Biometrika, 46, 352–362.
 
-Wikipedia: Skellam distribution ​
+Wikipedia: [Skellam distribution](https://en.wikipedia.org/wiki/Skellam_distribution)
 
 ## License
 
