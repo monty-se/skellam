@@ -1,8 +1,10 @@
-# skellam
+# Skellam
 
-[![CRAN version](https://www.r-pkg.org/badges/version/skellam)](https://cran.r-project.org/package=skellam)  
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![CRAN](https://www.r-pkg.org/badges/version-ago/skellam)
+[![R-CMD-check](https://github.com/monty-se/skellam/actions/workflows/rhub.yaml/badge.svg)](https://github.com/monty-se/skellam/actions/workflows/rhub.yaml)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/skellam)](https://cranlogs.r-pkg.org/badges/grand-total/skellam)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/skellam)](https://cran.r-project.org/package=skellam)
-
 ## Overview
 
 The **skellam** package provides functions for working with the Skellam distribution – the distribution of the difference between two independent Poisson random variables. It includes routines for:
