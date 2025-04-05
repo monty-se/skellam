@@ -23,11 +23,12 @@ Install the latest stable version from CRAN:
 
 ```r
 install.packages("skellam")
+```
+Alternatively, install the development version from GitHub:
 
-Alternatively, install the development version from R-Forge:
-
-install.packages("skellam", repos = "https://r-forge.r-project.org")
-
+```r
+# install.packages("remotes")  # Uncomment if needed
+remotes::install_github("monty-se/skellam")
 ```
 ## Usage
 ### Distribution Functions
