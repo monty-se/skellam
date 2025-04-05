@@ -1,6 +1,6 @@
 Package: skellam
 Version: 0.2.4
-Date: 2025-03-30
+Date: 2025-04-05
 Title: Densities and Sampling for the Skellam Distribution
 Author: Jerry W. Lewis <Jerry.Lewis@biogen.com>, Patrick E. Brown <patrick.brown@utoronto.ca>, Michail Tsagris <mtsagris@yahoo.gr>
 Maintainer: Montasser Ghachem <mg@pinstimation.com>, Oguz Ersan <oe@pinstimation.com>
@@ -16,5 +16,5 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Enhances: VGAM
 BuildVignettes: true
-Packaged: 2025-03-30 12:32:33 UTC; Montasser
+Packaged: 2025-04-05 12:32:33 UTC; Montasser
 Repository: CRAN
