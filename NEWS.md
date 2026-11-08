@@ -2,6 +2,8 @@
 
 ## Bug fixes
 
+- `dskellam()` is now accurate (relative error below 1e-12) for rates up to at least 1e7, and `log = TRUE` is finite in the deepest tails. Previously, for rates above about 5e4 the pmf was computed by a saddlepoint approximation that applied only half of its correction term (the probabilities summed to 1 - 1/(32 lambda)), `log = TRUE` returned natural-scale probabilities there, and `dskellam(500, 3, 2, log = TRUE)` was `-Inf`. The new core (`R/bessel.R`) evaluates the log Bessel function by the uniform asymptotic expansion for large orders, a stable downward recurrence for large arguments, and the power series where `besselI()` underflows.
+- `dskellam.sp()` now honours `log = TRUE` and applies the full second-order saddlepoint correction.
 - `skellam.mle()` and `skellam.reg()` no longer switch off warnings for the rest of the R session (they set `options(warn = -1)` and never restored it).
 
 - `dskellam()` returns `NA` for missing `x` instead of stopping with "missing value where TRUE/FALSE needed"; one `NA` no longer breaks a whole vector.

@@ -152,37 +152,11 @@ dskellam <- function(x, lambda1, lambda2=lambda1, log=FALSE){
     z2 <- ok & lambda2 == 0
     ret[z1] <- stats::dpois(-x[z1], lambda2[z1], log = log)
     ret[z2] <- stats::dpois( x[z2], lambda1[z2], log = log)    # corrects bug in VGAM 0.7-9
-   # non-zero lambdas
-    nz <- ok & (lambda1>0) & (lambda2>0)
-    L1 <- lambda1[nz];
-    L2 <- lambda2[nz];
-    sqL12 <- sqrt(L1*L2)
-    xx <- x[nz]
-    if (log) {       # use abs(x) in besselI for improved accuracy (prior to 2.9) and S-PLUS compatibility
-       # log(besselI(y,nu)) == y+log(besselI(y,nu,TRUE))
-        ret[nz] <- log(besselI(2*sqL12, abs(xx),TRUE))+2*sqL12-L1-L2+xx/2*log(L1/L2)
-    } else {
-       # besselI(y,nu); exp(y)*besselI(y,nu,TRUE)
-#       ret[nz] <- besselI(2*sqL12, abs(xx),TRUE)*(L1/L2)^(xx/2)*exp(2*sqL12-L1-L2)
-        ret[nz] <- besselI(2*sqL12, abs(xx),TRUE)*exp(2*sqL12-L1-L2+xx/2*log(L1/L2))
-    }
-    chk <- nz & (!is.finite(ret) | (!log)&(ret<1e-308)) # use saddlepoint approximation to detect possible over/underflow
-    if (length(chk[chk])>0) {
-        L1 <- lambda1[chk];
-        L2 <- lambda2[chk];
-            sqL12 <- sqrt(L1*L2)
-        xx <- x[chk]
-        s <- log(0.5*(xx+sqrt(xx^2+4*L1*L2))/L1)# the saddlepoint
-        K <- L1*(exp(s)-1)+L2*(exp(-s)-1)       # CGF(s)
-        K2 <- L1*exp(s)+L2*exp(-s)              # CGF''(s)
-        spd <- exp(K-xx*s)/sqrt(2*pi*K2)         # saddlepoint density, was x in place of xx
-        usp <- (spd>1e-308)&is.finite(spd)      # don't trust the existing result
-        if (length(usp[usp])>0) {   # add another term to the saddlepoint approximation
-            su <- s[usp]
-            K2u <- K2[usp]
-            c <- (1-((L1[usp]*exp(su)-L2[usp]*exp(-su))/K2u)^2*5/3)/K2u*0.125+1
-            ret[chk][usp] <- exp(K[usp]-x[usp]*su)/sqrt(2*pi*K2u)*(1+c)*0.5
-        }
+   # both rates positive: log-space core (see R/bessel.R), finite for every input
+    nz <- ok & (lambda1 > 0) & (lambda2 > 0)
+    if (any(nz)) {
+        lp <- .skellam_logpmf(x[nz], lambda1[nz], lambda2[nz])
+        ret[nz] <- if (log) lp else exp(lp)
     }
     if (length(nms) && nx == len) names(ret) <- nms
     ret
