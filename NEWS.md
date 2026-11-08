@@ -4,6 +4,10 @@
 
 - `skellam.mle()` and `skellam.reg()` no longer switch off warnings for the rest of the R session (they set `options(warn = -1)` and never restored it).
 
+- `dskellam()` returns `NA` for missing `x` instead of stopping with "missing value where TRUE/FALSE needed"; one `NA` no longer breaks a whole vector.
+- `dskellam()` returns 0 (or `-Inf` on the log scale) for non-integer `x`, as `dpois()` does, instead of the density at `trunc(x)`. Values within 1e-7 of an integer are treated as that integer.
+- `dskellam()` warns when argument lengths are not multiples of each other (the check could never fire), keeps `names(x)`, and returns 0 for infinite `x`.
+
 ## Infrastructure
 
 - Added a testthat test suite (`tests/testthat/`) replacing `tests/skellam.R`, which only drew plots.
