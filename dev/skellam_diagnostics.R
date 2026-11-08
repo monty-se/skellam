@@ -458,7 +458,9 @@ check("E4", "the fit is an object that coef() and logLik() understand",
     "class, so AIC(skellam.mle(x)) is an error and model comparison has to be done by hand. There",
     "are also no standard errors at all."),
   cause = "R/skellam.mle.R:83 returns list(iters, loglik, param).",
-  fix = "Return a classed object with estimates, vcov (from the observed information), loglik, nobs, and write the methods: this is skellam.fit() in the roadmap.")
+  fix = paste("Return a classed object with estimates, vcov (from the observed information), loglik,",
+    "nobs, and write the methods: this is skellam.fit() in the roadmap. PLANNED FOR 0.3.0: it changes",
+    "the return value, so it is deliberately not part of the 0.2.5 bug-fix release."))
 
 check("E2", "an under-dispersed sample (variance < mean) gives non-negative rates",
   run(skellam.mle(c(rep(2, 45), rep(3, 5)))$param),
@@ -488,7 +490,8 @@ check("E3", "a constant sample x = 3 gives the boundary estimate (3, 0)",
   fix = "Same as E3 above.")
 
 check("E3", "a sample containing NA gives a clear message",
-  run(skellam.mle(c(xs[1:20], NA))), function(v, w) inherits(v, "check_error") && grepl("NA", v$msg),
+  run(tryCatch(skellam.mle(c(xs[1:20], NA)), error = function(e) paste("error:", conditionMessage(e)))),
+  function(v, w) is.character(v) && grepl("^error:", v) && grepl("NA|missing", v),
   "an error that mentions NA, or an na.rm argument",
   why = "The error currently comes from deep inside nlm and does not tell the user that the data contain a missing value.",
   cause = "sum(x) is NA (line 68), so the start is NA and nlm complains about its own parameter.",
@@ -510,6 +513,20 @@ check("E5", "skellam.reg works when the rates are around 400",
     "(b) Even from a good start, the unscaled besselI overflows to Inf once 2*sqrt(lambda1*lambda2)",
     "exceeds about 713, i.e. rates around 360 (try besselI(800, 3))."),
   fix = "Use the log-scale density (log(besselI(a, abs(y), TRUE)) + a, or dskellam(log = TRUE) once fixed) and start from two Poisson GLMs.")
+
+set.seed(1); xr <- rnorm(3000)
+yr <- rpois(3000, exp(1.5 + 0.5 * xr)) - rpois(3000, exp(0.2 - 0.3 * xr))
+r <- run(c(param1_intercept = skellam.reg(yr, xr)$param1[1, 1], param2_intercept = skellam.reg(yr, xr)$param2[1, 1]))
+check("E7", "skellam.reg: param1 is the rate of the ADDED counts (y = Y1 - Y2, log lambda1 = 1.5 + 0.5x)",
+  r, function(v, w) abs(v[1] - 1.5) < 0.1 && abs(v[2] - 0.2) < 0.25, "param1_intercept=1.5 param2_intercept=0.2",
+  why = paste("The documentation, and dskellam(y, lambda1, lambda2), say that lambda1 is the rate of the",
+    "counts that are added. If the fit returns them the other way round, every coefficient is attributed",
+    "to the wrong process: in football, home attack effects reported as away attack effects."),
+  cause = paste("R/skellam.reg.R:66 (0.2.4) minimised sum(l1 + l2) + 0.5 * sum(y * (a1 - a2)) - sum(log I).",
+    "The log-pmf contains + (y/2) log(l1/l2) = + 0.5 y (a1 - a2), so minus the log-likelihood needs",
+    "- 0.5 y (a1 - a2). With the wrong sign the code fits -y; because I_|y| is symmetric the fit looks",
+    "fine, but the two blocks are swapped. The documented example wrote y <- y2 - y1, which hid it."),
+  fix = "Compute the log-likelihood with dskellam(y, lambda1, lambda2, log = TRUE), so the convention cannot diverge.")
 
 wcov <- seq_along(xs) / 500
 r <- run({ a <- skellam.reg(xs, wcov); b <- skellam.reg(xs, wcov); max(abs(a$param1[, 1] - b$param1[, 1])) })
