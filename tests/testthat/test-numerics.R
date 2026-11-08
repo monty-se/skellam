@@ -133,3 +133,13 @@ test_that("quantiles at large rates are fast, silent and invert the cdf  [N8]", 
   expect_identical(qskellam(pskellam(x, 1e5, 1e5), 1e5, 1e5), as.numeric(x))
   expect_identical(qskellam(pskellam(x, 1e5, 1e5, lower.tail = FALSE), 1e5, 1e5, lower.tail = FALSE), as.numeric(x))
 })
+
+test_that("pskellam.sp stays within [0, 1], handles both tails and log.p  [N16]", {
+  x <- -40:40
+  expect_true(all(pskellam.sp(x, 3, 2) >= 0 & pskellam.sp(x, 3, 2) <= 1))
+  expect_gte(pskellam.sp(-200, 3, 2), 0)
+  expect_equal(pskellam.sp(x, 3, 2, lower.tail = FALSE), 1 - pskellam.sp(x, 3, 2), tolerance = 1e-12)
+  expect_equal(pskellam.sp(x, 3, 2, log.p = TRUE), log(pskellam.sp(x, 3, 2)))
+  # relative accuracy of the approximation itself at moderate rates
+  expect_equal(pskellam.sp(x, 100, 80), pskellam(x, 100, 80), tolerance = 1e-3)
+})
