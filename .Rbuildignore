@@ -9,3 +9,6 @@
 ^CRAN-SUBMISSION$
 ^dev$
 ^skellam_diagnostics_results\.csv$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
