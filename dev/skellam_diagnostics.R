@@ -25,6 +25,9 @@
 ##   explanations for passing checks too.
 ##
 ##   The IDs (N1, E3, ...) match the issue numbers in the review document.
+##   File:line references in the CAUSE paragraphs are to version 0.2.4. Since
+##   then each file in R/ starts with a 12-line header, so add 12 to find the
+##   same line in the development version.
 ##   Results are also saved to dev/diagnostics_results.csv.
 ## =============================================================================
 
