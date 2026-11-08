@@ -1,3 +1,15 @@
+## --------------------------------------------------------------------------
+## dskellam.sp.r -- Saddlepoint approximation to the Skellam pmf
+##
+## Public functions:
+##   dskellam.sp()   second-order saddlepoint density
+##
+## Original author: Jerry W. Lewis
+## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
+## License:         GPL (>= 2)
+## Package:         skellam, https://github.com/monty-se/skellam
+## --------------------------------------------------------------------------
+
 #' @export
 #' @rdname skellam
 dskellam.sp <- function(x, lambda1, lambda2=lambda1, log=FALSE){

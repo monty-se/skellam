@@ -1,3 +1,15 @@
+## --------------------------------------------------------------------------
+## dskellam.r -- Skellam probability mass function
+##
+## Public functions:
+##   dskellam()      P(X = x), on the natural or log scale
+##
+## Original author: Jerry W. Lewis
+## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
+## License:         GPL (>= 2)
+## Package:         skellam, https://github.com/monty-se/skellam
+## --------------------------------------------------------------------------
+
 #' The Skellam Distribution
 #'
 #' Density, distribution function, quantile function, and random generation for the Skellam distribution.
@@ -109,42 +121,44 @@ NULL
 #' @rdname skellam
 dskellam <- function(x, lambda1, lambda2=lambda1, log=FALSE){
  # density (PMF) of Skellam distriubition (difference of Poissons)
-    if (missing(x)|missing(lambda1)) stop("first 2 arguments are required")
-    lambdas <- c(lambda1,lambda2)
-    oops <- !(is.finite(lambdas)&(lambdas>=0))
-    if(any(oops)) {
-        warning("NaNs produced")
-        lambdas[oops] <- NaN
-        lambda1 <- lambdas[1:length(lambda1)]
-        lambda2 <- lambdas[(length(lambda1)+1):length(lambdas)]
-    }
-   # make all args the same length (for subsetting)
-    lens <- c(length(x),length(lambda1),length(lambda2))
-    len <- max(lens)
-    if(len>min(lens)) {
-        if (all(len/lens!=len%/%lens)) warning("longer object length is not a multiple of shorter object length", domain=NA)
-        x <- rep(x,length.out=len)
-        lambda1 <- rep(lambda1,length.out=len)
-        lambda2 <- rep(lambda2,length.out=len)
-    }
-   # warn of non-integer x values (since support of PMF is integers)
-    nonint <- x!=trunc(x)
+    log <- isTRUE(as.logical(log[1]))
+    nms <- names(x)
+    nx <- length(x)
+   # recycle to a common length; warn when lengths are not multiples (N13)
+    a <- .skellam_recycle(x, lambda1, lambda2)
+    x <- as.numeric(a[[1]]); lambda1 <- as.numeric(a[[2]]); lambda2 <- as.numeric(a[[3]])
+    len <- length(x)
+    ret <- rep(NaN, length.out = len)
+   # invalid rates -> NaN with a warning, as dpois does
+    bad <- .skellam_bad_rate(lambda1) | .skellam_bad_rate(lambda2)
+    if (any(bad)) warning("NaNs produced")
+   # missing values propagate (N1): NA stays NA, NaN stays NaN
+    miss <- !bad & (is.na(x) | is.na(lambda1) | is.na(lambda2))
+    ret[miss] <- (x + lambda1 + lambda2)[miss]
+    ok <- !bad & !miss
+   # outside the integer support the pmf is 0 (N11); infinite x likewise
+    nonint <- ok & .skellam_nonint(x)
     if (any(nonint)) {
-        xreal <- x[nonint]
-        for (i in 1:length(xreal)) warning(paste("non-integer x =",xreal[i]))
+        xn <- x[nonint]
+        warning("non-integer x = ", paste(format(xn[seq_len(min(5L, length(xn)))]), collapse = ", "),
+                if (length(xn) > 5) ", ..." else "", call. = FALSE)
     }
-    x <- trunc(x)
-    ret <- rep(NaN,length.out=len)
+    off <- nonint | (ok & is.infinite(x))
+    ret[off] <- if (log) -Inf else 0
+    ok <- ok & !off
+    x[ok] <- round(x[ok])
    # handle a zero lambda separately (avoids division by zero & accuracy issues for large values of lambda or x)
-    ret[lambda1==0] <- stats::dpois(-x[lambda1==0],lambda2[lambda1==0],log=log)
-    ret[lambda2==0] <- stats::dpois( x[lambda2==0],lambda1[lambda2==0],log=log)    # corrects bug in VGAM 0.7-9
+    z1 <- ok & lambda1 == 0
+    z2 <- ok & lambda2 == 0
+    ret[z1] <- stats::dpois(-x[z1], lambda2[z1], log = log)
+    ret[z2] <- stats::dpois( x[z2], lambda1[z2], log = log)    # corrects bug in VGAM 0.7-9
    # non-zero lambdas
-    nz <- is.finite(lambda1)&is.finite(lambda2)&(lambda1>0)&(lambda2>0)
+    nz <- ok & (lambda1>0) & (lambda2>0)
     L1 <- lambda1[nz];
     L2 <- lambda2[nz];
     sqL12 <- sqrt(L1*L2)
     xx <- x[nz]
-    if (log[1]) {       # use abs(x) in besselI for improved accuracy (prior to 2.9) and S-PLUS compatibility
+    if (log) {       # use abs(x) in besselI for improved accuracy (prior to 2.9) and S-PLUS compatibility
        # log(besselI(y,nu)) == y+log(besselI(y,nu,TRUE))
         ret[nz] <- log(besselI(2*sqL12, abs(xx),TRUE))+2*sqL12-L1-L2+xx/2*log(L1/L2)
     } else {
@@ -170,5 +184,6 @@ dskellam <- function(x, lambda1, lambda2=lambda1, log=FALSE){
             ret[chk][usp] <- exp(K[usp]-x[usp]*su)/sqrt(2*pi*K2u)*(1+c)*0.5
         }
     }
+    if (length(nms) && nx == len) names(ret) <- nms
     ret
 }

@@ -1,3 +1,15 @@
+## --------------------------------------------------------------------------
+## pskellam.sp.r -- Saddlepoint approximation to the Skellam cdf
+##
+## Public functions:
+##   pskellam.sp()   Lugannani-Rice cdf with Butler's second continuity correction
+##
+## Original author: Jerry W. Lewis
+## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
+## License:         GPL (>= 2)
+## Package:         skellam, https://github.com/monty-se/skellam
+## --------------------------------------------------------------------------
+
 #' @export
 #' @rdname skellam
 pskellam.sp <- function(q, lambda1, lambda2=lambda1, lower.tail=TRUE, log.p=FALSE) {
