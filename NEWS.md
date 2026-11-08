@@ -29,6 +29,8 @@
 
 ## Documentation
 
+- `?skellam.reg` cites the published Karlis & Ntzoufras (2009) paper instead of a conference handout URL; the `skellam.mle()` examples set a seed.
+- `citation("skellam")` lists all five authors and the GitHub URL (it pointed to an R-Forge project and omitted the maintainers).
 - The `?skellam` help page now states the conventions the functions follow (recycling, `NA`, invalid input, the quantile definition) and describes the numerical methods and their accuracy; the hand-written usage block that duplicated the generated one is gone, and the note about R versions before 2.9 with it.
 
 ## Infrastructure
@@ -51,6 +53,6 @@
 
 ## Internal Changes
 - Updated vignette-building dependencies (now requires `rmarkdown` and `knitr`).
-- Minor fixes to ensure compatibility with `R CMD check` across all tested platforms (see `cran-results.md`).
+- Minor fixes to ensure compatibility with `R CMD check` across all tested platforms (see `cran-comments.md`).
 
 ---

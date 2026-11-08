@@ -39,6 +39,7 @@ for example, a sample of zeros gives \eqn{(0, 0)} and a constant sample
 }
 \examples{
 # Basic example
+set.seed(1)
 x1 <- rpois(1000, 10)
 x2 <- rpois(1000, 6)
 x <- x1 - x2

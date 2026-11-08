@@ -67,9 +67,9 @@ Royal Statistical Society, Series A} \bold{109}(3), 296.
 the difference between two Poisson variates. \emph{Statistica Neerlandica}
 \bold{16}(1), 17-23.
 
-\item Karlis D. and Ntzoufras I. (2009) \emph{Analysis of sports data using bivariate
-Poisson models}. IMA Conference Presentation.
-\url{http://www2.stat-athens.aueb.gr/~jbn/papers/files/20_Karlis_Ntzoufras_2009_IMA_presentation_handouts_v01.pdf}
+\item Karlis, D. and Ntzoufras, I. (2009) Bayesian modelling of football outcomes:
+using the Skellam's distribution for the goal difference. \emph{IMA Journal of
+Management Mathematics} \bold{20}(2), 133-145.
 }
 }
 \author{
