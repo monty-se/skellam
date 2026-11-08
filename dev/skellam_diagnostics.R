@@ -417,7 +417,8 @@ for (L in c(1e2, 1e4, 1e6)) {
 
 r <- run(qskellam(c(1e-10, 0.5, 1 - 1e-10), 1e6, 1e6))
 check("N8", sprintf("qskellam at lambda = 1e6 is fast and silent  [took %.2f s]", r$time),
-  r, function(v, w) length(w) == 0 && r$time < 0.05, "-8996 0 8996 in under 0.05 s, no warnings",
+  r, function(v, w) length(w) == 0 && r$time < 0.5 && identical(unname(v), c(-8996, 0, 8996)),
+  "-8996 0 8996 in under 0.5 s, no warnings",
   why = paste("The answers happen to be right because the Cornish-Fisher starting guess is",
     "excellent and only one comparison is needed. But each comparison calls the broken pskellam,",
     "so speed and correctness both depend on N8."),

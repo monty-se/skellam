@@ -69,6 +69,7 @@
 #'
 #' @examples
 #' # Basic example
+#' set.seed(1)
 #' x1 <- rpois(1000, 10)
 #' x2 <- rpois(1000, 6)
 #' x <- x1 - x2
@@ -80,7 +81,6 @@
 #' x <- x1 - x2
 #' skellam.mle(x)
 #'
-#' @export
 #' @keywords distribution models
 #' @author Michail Tsagris
 #' @export
