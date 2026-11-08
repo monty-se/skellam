@@ -78,7 +78,6 @@ skellam.reg <- function(y, x) {
     sum(lam1 + lam2)  + 0.5 * sum(y * (a1 - a2) ) - sum( log( besselI(a, y) ) )
   }
 
-  options(warn = -1)
   mod <- stats::nlm(skelreg, stats::rnorm(2 * p), iterlim = 5000 )
   mod <- stats::nlm(skelreg, mod$estimate, iterlim = 5000 )
   mod <- stats::optim(mod$estimate, skelreg, hessian = TRUE, control = list(maxit = 5000) )

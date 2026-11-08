@@ -1,5 +1,9 @@
 # skellam (development version)
 
+## Bug fixes
+
+- `skellam.mle()` and `skellam.reg()` no longer switch off warnings for the rest of the R session (they set `options(warn = -1)` and never restored it).
+
 ## Infrastructure
 
 - Added a testthat test suite (`tests/testthat/`) replacing `tests/skellam.R`, which only drew plots.

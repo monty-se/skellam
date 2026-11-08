@@ -88,7 +88,6 @@ skellam.mle <- function(x) {
     sum( log( besselI(a, x, expon.scaled = TRUE) ) ) - n * a
   }
 
-  options(warn = -1)
   mod <- stats::nlm(skel, theta)
   param <- c( mod$estimate + mx, mod$estimate )
   names(param) <- c("mu 1", "mu 2")
