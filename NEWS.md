@@ -19,6 +19,8 @@
 - `qskellam()` no longer gives different answers when `options(verbose = TRUE)` is set.
 - `rskellam()` returns an integer vector, like `rpois()`; invalid rates give `NA` with "NAs produced" (was `NaN`). The draws themselves are unchanged for a given seed.
 
+- `skellam.mle()` no longer returns negative rates. For samples whose variance does not exceed the absolute mean (including constant samples) it returned a negative "Poisson rate" such as (1.5, -1.5); for an all-zero sample it stopped with "non-finite value supplied by 'nlm'". It now maximizes the profile likelihood over the admissible range with `optimize()` and returns the boundary estimate when that is the maximum: (0, 0) for zeros, (c, 0) for a constant c > 0. Missing, non-integer or too few observations give clear errors. The return value keeps its components (`iters` now counts log-likelihood evaluations).
+
 ## Documentation
 
 - The `?skellam` help page now states the conventions the functions follow (recycling, `NA`, invalid input, the quantile definition) and describes the numerical methods and their accuracy; the hand-written usage block that duplicated the generated one is gone, and the note about R versions before 2.9 with it.
