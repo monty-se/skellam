@@ -1,3 +1,15 @@
+## --------------------------------------------------------------------------
+## skellam.mle.R -- Maximum likelihood estimation
+##
+## Public functions:
+##   skellam.mle()   MLE of (lambda1, lambda2) from a sample of differences
+##
+## Original author: Michail Tsagris
+## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
+## License:         GPL (>= 2)
+## Package:         skellam, https://github.com/monty-se/skellam
+## --------------------------------------------------------------------------
+
 #' Maximum Likelihood Estimation for the Skellam Distribution
 #'
 #' Estimates the parameters of a Skellam distribution using maximum likelihood.

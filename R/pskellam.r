@@ -1,3 +1,15 @@
+## --------------------------------------------------------------------------
+## pskellam.r -- Skellam cumulative distribution function
+##
+## Public functions:
+##   pskellam()      P(X <= q) or P(X > q), via the non-central chi-square identity
+##
+## Original author: Jerry W. Lewis
+## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
+## License:         GPL (>= 2)
+## Package:         skellam, https://github.com/monty-se/skellam
+## --------------------------------------------------------------------------
+
 #' @export
 #' @rdname skellam
 pskellam <- function(q, lambda1, lambda2=lambda1, lower.tail=TRUE, log.p=FALSE){

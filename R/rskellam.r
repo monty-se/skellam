@@ -1,3 +1,15 @@
+## --------------------------------------------------------------------------
+## rskellam.r -- Skellam random variates
+##
+## Public functions:
+##   rskellam()      draws as differences of two Poisson variates
+##
+## Original author: Jerry W. Lewis
+## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
+## License:         GPL (>= 2)
+## Package:         skellam, https://github.com/monty-se/skellam
+## --------------------------------------------------------------------------
+
 #' @export
 #' @rdname skellam
 rskellam <- function(n, lambda1, lambda2=lambda1){

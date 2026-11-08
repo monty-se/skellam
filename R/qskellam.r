@@ -1,3 +1,15 @@
+## --------------------------------------------------------------------------
+## qskellam.r -- Skellam quantile function
+##
+## Public functions:
+##   qskellam()      smallest integer x with P(X <= x) >= p (Cornish-Fisher start + search)
+##
+## Original author: Jerry W. Lewis
+## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
+## License:         GPL (>= 2)
+## Package:         skellam, https://github.com/monty-se/skellam
+## --------------------------------------------------------------------------
+
 #' @export
 #' @rdname skellam
 qskellam <- function(p, lambda1, lambda2=lambda1, lower.tail=TRUE, log.p=FALSE){

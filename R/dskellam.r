@@ -1,3 +1,15 @@
+## --------------------------------------------------------------------------
+## dskellam.r -- Skellam probability mass function
+##
+## Public functions:
+##   dskellam()      P(X = x), on the natural or log scale
+##
+## Original author: Jerry W. Lewis
+## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
+## License:         GPL (>= 2)
+## Package:         skellam, https://github.com/monty-se/skellam
+## --------------------------------------------------------------------------
+
 #' The Skellam Distribution
 #'
 #' Density, distribution function, quantile function, and random generation for the Skellam distribution.

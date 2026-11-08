@@ -1,3 +1,15 @@
+## --------------------------------------------------------------------------
+## skellam.reg.R -- Skellam regression
+##
+## Public functions:
+##   skellam.reg()   log-linear regression on both rates
+##
+## Original author: Michail Tsagris
+## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
+## License:         GPL (>= 2)
+## Package:         skellam, https://github.com/monty-se/skellam
+## --------------------------------------------------------------------------
+
 #' Skellam Regression
 #'
 #' Fits a regression model assuming a Skellam distribution for the response variable.
