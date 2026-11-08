@@ -2,6 +2,9 @@
 
 ## Bug fixes
 
+- `dskellam()` is now accurate (relative error below 1e-12) for rates up to at least 1e7, and `log = TRUE` is finite in the deepest tails. Previously, for rates above about 5e4 the pmf was computed by a saddlepoint approximation that applied only half of its correction term (the probabilities summed to 1 - 1/(32 lambda)), `log = TRUE` returned natural-scale probabilities there, and `dskellam(500, 3, 2, log = TRUE)` was `-Inf`. The new core (`R/bessel.R`) evaluates the log Bessel function by the uniform asymptotic expansion for large orders, a stable downward recurrence for large arguments, and the power series where `besselI()` underflows.
+- `pskellam()` is now accurate (relative error below 1e-11) at all rates. Above `lambda1 + lambda2 = 1e4` the non-central chi-square route through `pchisq()` was slow, lost accuracy, and beyond about 5e5 stopped converging and returned a wrong value (`pskellam(0, 1e6, 1e6)` gave 0.875; the answer is 0.500). Those rates, and any tail where `pchisq()` underflows, now use a direct log-space summation of the pmf, so far tails are exact on the log scale and never negative. Quantiles at large rates are correspondingly faster: `qskellam()` at rates of 1e6 takes 0.04 s instead of 0.7 s with warnings.
+- `dskellam.sp()` now honours `log = TRUE` and applies the full second-order saddlepoint correction.
 - `skellam.mle()` and `skellam.reg()` no longer switch off warnings for the rest of the R session (they set `options(warn = -1)` and never restored it).
 
 - `dskellam()` returns `NA` for missing `x` instead of stopping with "missing value where TRUE/FALSE needed"; one `NA` no longer breaks a whole vector.
@@ -15,6 +18,10 @@
 - `qskellam()` validates its input: `p` outside [0, 1] and negative rates give `NaN` with a warning (were `Inf` or an error), missing values give `NA` (were an error). It warns about recycling and keeps `names(p)`.
 - `qskellam()` no longer gives different answers when `options(verbose = TRUE)` is set.
 - `rskellam()` returns an integer vector, like `rpois()`; invalid rates give `NA` with "NAs produced" (was `NaN`). The draws themselves are unchanged for a given seed.
+
+## Documentation
+
+- The `?skellam` help page now states the conventions the functions follow (recycling, `NA`, invalid input, the quantile definition) and describes the numerical methods and their accuracy; the hand-written usage block that duplicated the generated one is gone, and the note about R versions before 2.9 with it.
 
 ## Infrastructure
 
