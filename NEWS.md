@@ -14,6 +14,7 @@
 - `qskellam()` with `lambda1 = 0` no longer returns one more than the correct quantile at cdf values.
 - `qskellam()` validates its input: `p` outside [0, 1] and negative rates give `NaN` with a warning (were `Inf` or an error), missing values give `NA` (were an error). It warns about recycling and keeps `names(p)`.
 - `qskellam()` no longer gives different answers when `options(verbose = TRUE)` is set.
+- `rskellam()` returns an integer vector, like `rpois()`; invalid rates give `NA` with "NAs produced" (was `NaN`). The draws themselves are unchanged for a given seed.
 
 ## Infrastructure
 
