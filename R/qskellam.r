@@ -62,7 +62,16 @@ qskellam <- function(p, lambda1, lambda2=lambda1, lower.tail=TRUE, log.p=FALSE){
    # test and linear search (slow if p extreme or lambda1+lambda2 small)
     q0 <- round(c0+c1+c2)
     p0 <- pskellam(q0,lambda1,lambda2,lower.tail=lower.tail,log.p=log.p)
-    p <- p*(1-64*.Machine$double.eps)       # match qpois in assuming that a value within 1.4e-14 of p actually equals p
+   # match qpois in assuming that a value within 1.4e-14 of p actually equals p.
+   # The nudge must make the stopping condition easier to meet: shrink p for
+   # the lower tail (F(x) >= p), enlarge it for the upper tail (P(X > x) <= p),
+   # and on the log scale add log(1 -/+ eps) rather than multiply (N3).
+    fz <- 64*.Machine$double.eps
+    if (log.p) {
+        p <- p + if (lower.tail) log1p(-fz) else log1p(fz)
+    } else {
+        p <- p * if (lower.tail) (1 - fz) else (1 + fz)
+    }
     if (lower.tail){    # smallest x such that F(x) >= p (consider floor for greater efficiency?)
         up <- up1 <- p0 < p
         while(any(up1)){

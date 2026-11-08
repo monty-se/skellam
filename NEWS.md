@@ -9,6 +9,7 @@
 - `dskellam()` warns when argument lengths are not multiples of each other (the check could never fire), keeps `names(x)`, and returns 0 for infinite `x`.
 - `pskellam(q, 0, 0)` is 0 or 1 instead of `NaN`, and any zero rate is now computed exactly with `ppois()` (previously an exact 0 from `pchisq()` was sent to the saddlepoint approximation, which divides by the zero rate).
 - `pskellam()` returns `NA` for missing `q` (was `NaN`), 0/1 for `q = -Inf`/`Inf` (was `NaN` with warnings), warns about recycling, and keeps `names(q)`.
+- `qskellam()` with `lower.tail = FALSE`, or with `log.p = TRUE`, no longer returns one more than the correct quantile whenever `p` is exactly a cdf value. `qskellam(pskellam(x, ...), ...) == x` now holds on both tails and both scales.
 
 ## Infrastructure
 
