@@ -1,0 +1,56 @@
+url: https://monty-se.github.io/skellam/
+
+template:
+  bootstrap: 5
+  math-rendering: mathjax
+  bslib:
+    primary: "#0072B2"
+    link-color: "#0072B2"
+
+home:
+  title: "skellam: the Skellam distribution in R"
+  description: >
+    Density, distribution function, quantiles, random generation, maximum
+    likelihood and regression for the difference of two Poisson counts.
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    intro:
+      text: Get started
+      href: articles/validate_skellam.html
+    github:
+      icon: fa-github
+      href: https://github.com/monty-se/skellam
+      aria-label: GitHub
+
+reference:
+- title: The Skellam distribution
+  desc: >
+    Density, distribution function, quantile function and random generation,
+    with saddlepoint approximations to the density and distribution function.
+  contents:
+  - skellam
+- title: Estimation
+  desc: >
+    Maximum likelihood estimation from a sample of differences, and regression
+    with covariates on both rates.
+  contents:
+  - skellam.mle
+  - skellam.reg
+
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - validate_skellam
+
+news:
+  cran_dates: false
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with
