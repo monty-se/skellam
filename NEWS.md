@@ -1,5 +1,9 @@
 # skellam (development version)
 
+## Breaking change
+
+- `skellam.reg()`: `param1` now describes the rate of the counts that are **added** and `param2` the rate of the counts that are **subtracted**, as in `dskellam(y, lambda1, lambda2)` and as the documentation always said. The log-likelihood had the sign of the `y * log(lambda1 / lambda2)` term reversed, so the two blocks were swapped: for `y = Y1 - Y2`, `param1` estimated the rate of `Y2`. Results from earlier versions should be re-run; the old documented example compensated by writing `y <- y2 - y1`.
+
 ## Bug fixes
 
 - `dskellam()` is now accurate (relative error below 1e-12) for rates up to at least 1e7, and `log = TRUE` is finite in the deepest tails. Previously, for rates above about 5e4 the pmf was computed by a saddlepoint approximation that applied only half of its correction term (the probabilities summed to 1 - 1/(32 lambda)), `log = TRUE` returned natural-scale probabilities there, and `dskellam(500, 3, 2, log = TRUE)` was `-Inf`. The new core (`R/bessel.R`) evaluates the log Bessel function by the uniform asymptotic expansion for large orders, a stable downward recurrence for large arguments, and the power series where `besselI()` underflows.
@@ -20,6 +24,8 @@
 - `rskellam()` returns an integer vector, like `rpois()`; invalid rates give `NA` with "NAs produced" (was `NaN`). The draws themselves are unchanged for a given seed.
 
 - `skellam.mle()` no longer returns negative rates. For samples whose variance does not exceed the absolute mean (including constant samples) it returned a negative "Poisson rate" such as (1.5, -1.5); for an all-zero sample it stopped with "non-finite value supplied by 'nlm'". It now maximizes the profile likelihood over the admissible range with `optimize()` and returns the boundary estimate when that is the maximum: (0, 0) for zeros, (c, 0) for a constant c > 0. Missing, non-integer or too few observations give clear errors. The return value keeps its components (`iters` now counts log-likelihood evaluations).
+
+- `skellam.reg()` now works at any rate, gives identical results on repeated calls, and reports problems. It used `besselI()` without scaling, which overflowed for rates above about 360 and underflowed at its starting values when the data had large differences ("function cannot be evaluated at initial parameters"); it started from random values (`rnorm()`) without a seed, so two calls on the same data differed; and it chained three optimizers without checking convergence. It now uses `dskellam(log = TRUE)`, starts deterministically from intercept-only moment estimates, runs one BFGS optimization with the analytic gradient, and warns if the optimizer does not converge or the information matrix cannot be inverted (standard errors are then `NA`). Observations with missing values are removed with a warning (previously a missing covariate silently misaligned `y` and `x`).
 
 ## Documentation
 
