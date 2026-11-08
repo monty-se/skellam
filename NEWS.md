@@ -10,6 +10,10 @@
 - `pskellam(q, 0, 0)` is 0 or 1 instead of `NaN`, and any zero rate is now computed exactly with `ppois()` (previously an exact 0 from `pchisq()` was sent to the saddlepoint approximation, which divides by the zero rate).
 - `pskellam()` returns `NA` for missing `q` (was `NaN`), 0/1 for `q = -Inf`/`Inf` (was `NaN` with warnings), warns about recycling, and keeps `names(q)`.
 - `qskellam()` with `lower.tail = FALSE`, or with `log.p = TRUE`, no longer returns one more than the correct quantile whenever `p` is exactly a cdf value. `qskellam(pskellam(x, ...), ...) == x` now holds on both tails and both scales.
+- `qskellam(1, ...)` returns `Inf` (was `-Inf`), and `p = 0`/`p = 1` give the ends of the support on both tails and on the log scale (`qskellam(0, 3, 2, log.p = TRUE)` stopped with an error).
+- `qskellam()` with `lambda1 = 0` no longer returns one more than the correct quantile at cdf values.
+- `qskellam()` validates its input: `p` outside [0, 1] and negative rates give `NaN` with a warning (were `Inf` or an error), missing values give `NA` (were an error). It warns about recycling and keeps `names(p)`.
+- `qskellam()` no longer gives different answers when `options(verbose = TRUE)` is set.
 
 ## Infrastructure
 
