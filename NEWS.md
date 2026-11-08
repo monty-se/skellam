@@ -19,6 +19,10 @@
 - `qskellam()` no longer gives different answers when `options(verbose = TRUE)` is set.
 - `rskellam()` returns an integer vector, like `rpois()`; invalid rates give `NA` with "NAs produced" (was `NaN`). The draws themselves are unchanged for a given seed.
 
+## Documentation
+
+- The `?skellam` help page now states the conventions the functions follow (recycling, `NA`, invalid input, the quantile definition) and describes the numerical methods and their accuracy; the hand-written usage block that duplicated the generated one is gone, and the note about R versions before 2.9 with it.
+
 ## Infrastructure
 
 - Added a testthat test suite (`tests/testthat/`) replacing `tests/skellam.R`, which only drew plots.
