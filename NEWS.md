@@ -1,4 +1,4 @@
-# skellam (development version)
+# skellam 0.2.5
 
 ## Breaking change
 
