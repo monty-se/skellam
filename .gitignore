@@ -4,3 +4,6 @@
 .Ruserdata
 dev/diagnostics_results.csv
 skellam_diagnostics_results.csv
+/doc/
+/Meta/
+/build/
