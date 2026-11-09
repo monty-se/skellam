@@ -74,6 +74,14 @@
   [`scale_fill_skellam()`](https://monty-se.github.io/skellam/reference/skellam_palette.md)
   give other figures the same look.
 
+- New dataset `icu_bavaria`: daily COVID-19 intensive care occupancy,
+  reported first admissions and seven-day infection counts in Bavaria,
+  2020-2023, from the Robert Koch Institute (CC BY 4.0). The new website
+  article “Disease surveillance” uses it to estimate the daily numbers
+  of patients entering and leaving intensive care from the occupancy
+  alone, following Rave and Kauermann (2025), and checks the estimates
+  against the reported admissions.
+
 ### Deprecated
 
 - [`skellam.mle()`](https://monty-se.github.io/skellam/reference/skellam.mle.md)

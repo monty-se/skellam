@@ -1,10 +1,12 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://monty-se.github.io/skellam/404.html</loc></url>
 <url><loc>https://monty-se.github.io/skellam/articles/index.html</loc></url>
+<url><loc>https://monty-se.github.io/skellam/articles/surveillance.html</loc></url>
 <url><loc>https://monty-se.github.io/skellam/articles/validate_skellam.html</loc></url>
 <url><loc>https://monty-se.github.io/skellam/authors.html</loc></url>
 <url><loc>https://monty-se.github.io/skellam/index.html</loc></url>
 <url><loc>https://monty-se.github.io/skellam/news/index.html</loc></url>
+<url><loc>https://monty-se.github.io/skellam/reference/icu_bavaria.html</loc></url>
 <url><loc>https://monty-se.github.io/skellam/reference/index.html</loc></url>
 <url><loc>https://monty-se.github.io/skellam/reference/skellam-plots.html</loc></url>
 <url><loc>https://monty-se.github.io/skellam/reference/skellam.fit.html</loc></url>

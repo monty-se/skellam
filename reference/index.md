@@ -80,6 +80,13 @@ with a fit, and the package’s ggplot2 theme and colours.
   [`scale_fill_skellam()`](https://monty-se.github.io/skellam/reference/skellam_palette.md)
   : Colours and Theme for skellam Plots
 
+## Data
+
+Example data used in the articles.
+
+- [`icu_bavaria`](https://monty-se.github.io/skellam/reference/icu_bavaria.md)
+  : COVID-19 Intensive Care Occupancy in Bavaria
+
 ## Deprecated
 
 Kept for backward compatibility until version 1.0.0.
