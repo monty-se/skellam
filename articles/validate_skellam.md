@@ -20,7 +20,7 @@ other:
 2.  `pskellam` against cumulative sums of `dskellam`, and `qskellam` as
     its inverse;
 3.  `rskellam` against `dskellam` with a goodness-of-fit test;
-4.  `skellam.fit` and `skellam.reg` against known parameters in
+4.  `skellam.mle` and `skellam.reg` against known parameters in
     simulated data.
 
 Every random number below is drawn after `set.seed(20261108)`, so the
@@ -164,133 +164,50 @@ from dskellam (points).
 ``` r
 
 x <- rpois(2000, 12) - rpois(2000, 8)
-fit <- skellam.fit(x)
-summary(fit)
-#> 
-#> Call:
-#> skellam.fit(x = x)
-#> 
-#> Skellam distribution fitted by maximum likelihood (n = 2000)
-#> 
-#>         Estimate Std. Error  2.5 % 97.5 %
-#> lambda1   12.066     0.3276 11.440 12.725
-#> lambda2    8.159     0.3246  7.547  8.821
-#> 
-#> Sample and fitted moments:
-#>                    sample   fitted
-#> mean             3.906500  3.90650
-#> variance        20.192854 20.22500
-#> skewness        -0.001085  0.04295
-#> excess kurtosis -0.014998  0.04944
-#> 
-#> var(x) - |mean(x)| = 16.29 (must be >= 0 for two positive rates)
-#> log-likelihood -5843.096, AIC 11690.19, BIC 11701.39
+fit <- skellam.mle(x)
+fit$param
+#>      mu 1      mu 2 
+#> 12.065749  8.159249
 ```
 
-At the maximum the fitted mean equals the sample mean, and the 95%
-confidence intervals cover the true values (12, 8). Samples whose
-variance does not exceed the absolute mean cannot come from a Skellam
-with two positive rates; the estimate then puts one rate at zero, with a
-warning, instead of returning a negative rate:
+At the maximum the fitted mean equals the sample mean, and the estimates
+are close to the true values (12, 8). Samples whose variance does not
+exceed the absolute mean cannot come from a Skellam with two positive
+rates; the estimate then puts one rate at zero instead of returning a
+negative rate:
 
 ``` r
 
-coef(skellam.fit(rep(3, 50)))
-#> Warning: the estimate lies on the boundary (a rate is 0): the sample variance
-#> does not exceed the absolute mean; standard errors are not available
-#> lambda1 lambda2 
-#>       3       0
-coef(skellam.fit(c(rep(2, 45), rep(3, 5))))
-#> Warning: the estimate lies on the boundary (a rate is 0): the sample variance
-#> does not exceed the absolute mean; standard errors are not available
-#> lambda1 lambda2 
-#>     2.1     0.0
+skellam.mle(rep(3, 50))$param
+#> mu 1 mu 2 
+#>    3    0
+skellam.mle(c(rep(2, 45), rep(3, 5)))$param
+#> mu 1 mu 2 
+#>  2.1  0.0
 ```
 
 ### Regression
 
-[`skellam.reg()`](https://monty-se.github.io/skellam/reference/skellam.reg.md)
-lets both rates depend on covariates through log links. For \\y = Y_1 -
-Y_2\\, the part of the formula before `|` is the model for \\\lambda_1\\
-(the counts that are added) and the part after it the model for
-\\\lambda_2\\ (the counts that are subtracted).
+`skellam.reg(y, x)` lets both rates depend on covariates through a log
+link. For \\y = Y_1 - Y_2\\, `param1` describes the rate of the counts
+that are added (\\\lambda_1\\) and `param2` the rate of the counts that
+are subtracted (\\\lambda_2\\).
 
 ``` r
 
 n <- 1000
-d <- data.frame(u = rnorm(n), v = rnorm(n))
-d$y <- rpois(n, exp(1 + 0.5 * d$u)) - rpois(n, exp(-0.5 + 0.3 * d$v))
-reg <- skellam.reg(y ~ u | v, data = d)
-summary(reg)   # true values: lambda1 (1, 0.5), lambda2 (-0.5, 0.3)
-#> 
-#> Call:
-#> skellam.reg(formula = y ~ u | v, data = d)
-#> 
-#> log(lambda1): rate of the counts that are added
-#>             Estimate Std. Error z value Pr(>|z|)    
-#> (Intercept)  1.00026    0.03033   32.98   <2e-16 ***
-#> u            0.46286    0.02096   22.09   <2e-16 ***
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> log(lambda2): rate of the counts that are subtracted
-#>             Estimate Std. Error z value Pr(>|z|)    
-#> (Intercept) -0.53322    0.11106  -4.801 1.58e-06 ***
-#> v            0.30633    0.07993   3.832 0.000127 ***
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> n = 1000, residual df = 996, log-likelihood -2010.799, AIC 4029.599, BIC 4049.23
+covariate <- rnorm(n)
+y <- rpois(n, exp(1 + 0.5 * covariate)) - rpois(n, exp(-0.5 + 0.3 * covariate))
+reg <- skellam.reg(y, covariate)
+round(reg$param1, 3)   # true values 1 and 0.5
+#>             Estimate Std. Error Wald value p-value
+#> (Intercept)    0.982      0.031     31.615       0
+#> x              0.520      0.026     19.876       0
+round(reg$param2, 3)   # true values -0.5 and 0.3
+#>             Estimate Std. Error Wald value p-value
+#> (Intercept)   -0.550      0.118     -4.650   0.000
+#> x              0.329      0.110      2.975   0.003
 ```
-
-The fitted probabilities of each value of \\y\\ add up to one for every
-observation, and the randomized quantile residuals are standard normal
-when the model is right:
-
-``` r
-
-range(rowSums(predict(reg, type = "prob", at = -60:60)))
-#> [1] 1 1
-q <- residuals(reg, type = "quantile")
-c(mean = mean(q), sd = sd(q))
-#>          mean            sd 
-#> -0.0005193708  0.9944568499
-```
-
-## 5. Diagnostic plots
-
-With ggplot2 installed,
-[`plot()`](https://rdrr.io/r/graphics/plot.default.html) compares the
-data with the fit. The hanging rootogram shows the square roots of the
-observed counts as bars hanging from the square roots of the expected
-counts; bars that end near zero mean the model fits. A sample with 60
-extra zeros shows up as a bar reaching far below zero at 0.
-
-``` r
-
-x0 <- rpois(500, 6) - rpois(500, 4)
-x1 <- c(rpois(440, 6) - rpois(440, 4), rep(0, 60))
-plot(skellam.fit(x0))
-```
-
-![Hanging rootograms for a Skellam sample (first) and for the same kind
-of sample with 60 extra zeros
-(second).](validate_skellam_files/figure-html/plots-1.png)
-
-Hanging rootograms for a Skellam sample (first) and for the same kind of
-sample with 60 extra zeros (second).
-
-``` r
-
-plot(skellam.fit(x1))
-```
-
-![Hanging rootograms for a Skellam sample (first) and for the same kind
-of sample with 60 extra zeros
-(second).](validate_skellam_files/figure-html/plots-2.png)
-
-Hanging rootograms for a Skellam sample (first) and for the same kind of
-sample with 60 extra zeros (second).
 
 ## Getting help
 

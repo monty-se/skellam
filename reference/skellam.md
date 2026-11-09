@@ -133,7 +133,7 @@ who want the approximations themselves and are not used by `dskellam` or
 
 ## See also
 
-[`skellam.fit`](https://monty-se.github.io/skellam/reference/skellam.fit.md)
+[`skellam.mle`](https://monty-se.github.io/skellam/reference/skellam.mle.md)
 and
 [`skellam.reg`](https://monty-se.github.io/skellam/reference/skellam.reg.md)
 for estimation; [`dpois`](https://rdrr.io/r/stats/Poisson.html) for the
