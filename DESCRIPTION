@@ -16,11 +16,13 @@ Description: Density, distribution function, quantile function and random
 URL: https://monty-se.github.io/skellam/, https://github.com/monty-se/skellam
 BugReports: https://github.com/monty-se/skellam/issues
 License: GPL (>= 2)
+Depends: R (>= 3.5.0)
 Imports: stats, utils
 Suggests: ggplot2 (>= 3.4.0), knitr, rmarkdown, testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Encoding: UTF-8
+LazyData: true
 Language: en-GB
 Roxygen: list(markdown = TRUE)
 Enhances: VGAM

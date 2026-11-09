@@ -59,6 +59,11 @@ reference:
   contents:
   - skellam-plots
   - skellam_palette
+- title: Data
+  desc: >
+    Example data used in the articles.
+  contents:
+  - icu_bavaria
 - title: Deprecated
   desc: >
     Kept for backward compatibility until version 1.0.0.
@@ -66,8 +71,12 @@ reference:
   - skellam.mle
 
 articles:
-- title: Articles
-  navbar: ~
+- title: Applications
+  navbar: Applications
+  contents:
+  - articles/surveillance
+- title: Methods
+  navbar: Methods
   contents:
   - validate_skellam
 
