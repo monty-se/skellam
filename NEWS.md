@@ -1,3 +1,7 @@
+# skellam (development version)
+
+- The package has a website, <https://monty-se.github.io/skellam/>, built with pkgdown and published by GitHub Actions; its address is in `DESCRIPTION` and the README.
+
 # skellam 0.2.5
 
 ## Breaking change
