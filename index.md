@@ -20,6 +20,9 @@ for rates up to at least 1e7, and remain finite on the log scale far
 into the tails, so they can be used safely inside likelihoods. They
 follow the conventions of R’s own `dpois`, `ppois`, `qpois` and `rpois`.
 
+Documentation, the changelog and the validation article are on the
+package website: <https://monty-se.github.io/skellam/>.
+
 ## Installation
 
 ``` r
