@@ -4,57 +4,95 @@
 \alias{skellam.reg}
 \title{Skellam Regression}
 \usage{
-skellam.reg(y, x)
+skellam.reg(formula, data = NULL, ...)
 }
 \arguments{
-\item{y}{A vector of integers (positive or negative)}
+\item{formula}{A formula \code{y ~ x1 + x2} (the same covariates for both
+rates) or a two-part formula \code{y ~ x1 + x2 | z1 + z2}, where the part
+before \code{|} is the model for \eqn{\lambda_1}{lambda1} and the part after
+it the model for \eqn{\lambda_2}{lambda2}. Offsets can be given with
+\code{offset()} in either part. For the original interface, a numeric
+vector \code{y}; see Details.}
 
-\item{x}{A matrix, vector or data.frame of covariates}
+\item{data}{A data frame containing the variables in the formula. For the
+original interface, the covariates \code{x}.}
+
+\item{...}{For the original interface, \code{y} and \code{x} may also be
+given by name.}
 }
 \value{
-A list with components:
+An object of class \code{"skellam_reg"}, a list with components
 \describe{
-\item{loglik}{Maximized log-likelihood value}
-\item{param1}{Matrix for \eqn{\lambda_1} parameters:
-\itemize{
-\item Column 1: Estimated coefficients
-\item Column 2: Standard errors
-\item Column 3: Wald z statistics (coef/se)
-\item Column 4: p-values (Wald test)
+\item{coefficients}{A list with the coefficient vectors \code{lambda1} and
+\code{lambda2}.}
+\item{vcov}{Covariance matrix of all coefficients.}
+\item{loglik}{Maximised log-likelihood.}
+\item{param1, param2}{Coefficient tables (estimate, standard error, Wald
+statistic, p-value) for \eqn{\lambda_1}{lambda1} and
+\eqn{\lambda_2}{lambda2}, as returned by earlier versions.}
+\item{fitted.values}{A data frame with the fitted rates \code{lambda1} and
+\code{lambda2}.}
+\item{y, nobs, df.residual, converged, call, formula, terms, levels}{The
+response used, the number of observations, the residual degrees of
+freedom, whether the optimizer converged, and what is needed to predict
+on new data.}
 }
-}
-\item{param2}{Matrix for \eqn{\lambda_2} parameters (same structure as param1)}
-}
+Methods are available for \code{print}, \code{summary}, \code{coef},
+\code{vcov}, \code{logLik} (hence \code{AIC}, \code{BIC}), \code{nobs},
+\code{confint} (the default method), \code{fitted}, \code{residuals},
+\code{predict}, \code{simulate}, \code{anova} and \code{update}.
 }
 \description{
-Fits a regression model assuming a Skellam distribution for the response variable.
+Fits a regression model in which a difference of counts \eqn{y = Y_1 - Y_2}{y = Y1 - Y2}
+follows a Skellam distribution and both rates depend on covariates through
+log links.
 }
 \details{
 The response is modelled as \eqn{y_i = Y_{1i} - Y_{2i}}{y = Y1 - Y2} with
-\eqn{Y_{1i} \sim \mathrm{Poisson}(\lambda_{1i})}{Y1 ~ Poisson(lambda1)} and
-\eqn{Y_{2i} \sim \mathrm{Poisson}(\lambda_{2i})}{Y2 ~ Poisson(lambda2)}, so that
-\code{param1} describes the rate of the counts that are added and
-\code{param2} the rate of the counts that are subtracted, as in
-\code{dskellam(y, lambda1, lambda2)}. Both rates use a log link,
-\eqn{\log\lambda_{ki} = x_i^\top\beta_k}{log(lambda_k) = x'beta_k}, with the same
-covariates (an intercept is added).
+independent \eqn{Y_{1i} \sim \mathrm{Poisson}(\lambda_{1i})}{Y1 ~ Poisson(lambda1)} and
+\eqn{Y_{2i} \sim \mathrm{Poisson}(\lambda_{2i})}{Y2 ~ Poisson(lambda2)}, and
+\eqn{\log\lambda_{1i} = x_{1i}^\top\beta_1}{log(lambda1) = x1'beta1},
+\eqn{\log\lambda_{2i} = x_{2i}^\top\beta_2}{log(lambda2) = x2'beta2}. So the
+\code{lambda1} coefficients describe the rate of the counts that are added
+and the \code{lambda2} coefficients the rate of the counts that are
+subtracted, as in \code{dskellam(y, lambda1, lambda2)}.
 
 The log-likelihood is computed with \code{dskellam(log = TRUE)} and
-maximized by \code{\link[stats]{optim}} (BFGS) with the analytic gradient,
-starting deterministically from the moment estimates of an intercept-only
-model, so repeated calls give identical results. Standard errors come from
-the inverse of the observed information (\code{\link[stats]{optimHess}}).
-Observations with a missing response or covariate are removed with a
-warning. A warning is also given if the optimizer does not converge or the
-information matrix is not invertible (standard errors are then \code{NA}).
+maximised by \code{\link[stats]{optim}} (BFGS) with the analytic gradient,
+from deterministic starting values (least-squares fits of the log moment
+estimates of an intercept-only model), so repeated calls give identical
+results. Standard errors come from the inverse of the observed information
+(\code{\link[stats]{optimHess}}). Observations with missing values in any
+variable used are removed with a warning. A warning is also given if the
+optimizer does not converge or the information matrix is not invertible
+(standard errors are then \code{NA}).
+
+\strong{Original interface.} \code{skellam.reg(y, x)} with a numeric response
+\code{y} and a vector, matrix or data frame of covariates \code{x} fits the
+model with the same covariates (and an intercept) for both rates, exactly as
+in earlier versions of the package.
 }
 \examples{
-set.seed(0)
-x <- rnorm(100)
-y1 <- rpois(100, exp(1 + 1 * x))
-y2 <- rpois(100, exp(-1 + 1 * x))
-y <- y1 - y2
-skellam.reg(y, x)   # param1 near (1, 1), param2 near (-1, 1)
+set.seed(1)
+n <- 500
+d <- data.frame(attack = rnorm(n), defence = rnorm(n))
+d$goaldiff <- rpois(n, exp(0.4 + 0.3 * d$attack)) -
+              rpois(n, exp(0.1 - 0.2 * d$defence))
+
+# different covariates for the two rates
+m <- skellam.reg(goaldiff ~ attack | defence, data = d)
+m
+summary(m)
+
+# nested models: likelihood-ratio test
+m0 <- skellam.reg(goaldiff ~ 1 | 1, data = d)
+anova(m0, m)
+
+# probabilities of each goal difference for new data
+predict(m, newdata = data.frame(attack = 1, defence = 0), type = "prob", at = -2:2)
+
+# original interface: same covariates (and an intercept) for both rates
+skellam.reg(d$goaldiff, d$attack)$param1
 
 }
 \references{
@@ -63,17 +101,18 @@ skellam.reg(y, x)   # param1 near (1, 1), param2 near (-1, 1)
 two Poisson variates belonging to different populations. \emph{Journal of the
 Royal Statistical Society, Series A} \bold{109}(3), 296.
 
-\item Strackee, J.; van der Gon, J. J. D. (1962) The frequency distribution of
-the difference between two Poisson variates. \emph{Statistica Neerlandica}
-\bold{16}(1), 17-23.
-
 \item Karlis, D. and Ntzoufras, I. (2009) Bayesian modelling of football outcomes:
 using the Skellam's distribution for the goal difference. \emph{IMA Journal of
 Management Mathematics} \bold{20}(2), 133-145.
 }
 }
+\seealso{
+\code{\link{predict.skellam_reg}}, \code{\link{skellam.fit}} for a
+single sample, \code{\link{skellam}} for the distribution.
+}
 \author{
-Michail Tsagris
+Michail Tsagris; formula interface and methods by Montasser Ghachem
+and Oguz Ersan
 }
 \keyword{models}
 \keyword{regression}

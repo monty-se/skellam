@@ -75,7 +75,7 @@ test_that("skellam.reg: param1 is the rate of the added counts, param2 of the su
 test_that("skellam.reg keeps its return shape", {
   d <- sim_reg(300, c(1, 0.3), c(0.5, 0), seed = 2)
   r <- skellam.reg(d$y, d$x)
-  expect_named(r, c("loglik", "param1", "param2"))
+  expect_true(all(c("loglik", "param1", "param2") %in% names(r)))   # components of earlier versions
   expect_identical(colnames(r$param1), c("Estimate", "Std. Error", "Wald value", "p-value"))
   expect_identical(rownames(r$param1), c("(Intercept)", "x"))
   b1 <- r$param1[, 1]; b2 <- r$param2[, 1]

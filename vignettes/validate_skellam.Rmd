@@ -150,17 +150,26 @@ coef(skellam.fit(c(rep(2, 45), rep(3, 5))))
 
 ### Regression
 
-`skellam.reg(y, x)` lets both rates depend on covariates through a log link. For
-$y = Y_1 - Y_2$, `param1` describes the rate of the counts that are added
-($\lambda_1$) and `param2` the rate of the counts that are subtracted ($\lambda_2$).
+`skellam.reg()` lets both rates depend on covariates through log links. For
+$y = Y_1 - Y_2$, the part of the formula before `|` is the model for $\lambda_1$
+(the counts that are added) and the part after it the model for $\lambda_2$ (the
+counts that are subtracted).
 
 ```{r reg}
 n <- 1000
-covariate <- rnorm(n)
-y <- rpois(n, exp(1 + 0.5 * covariate)) - rpois(n, exp(-0.5 + 0.3 * covariate))
-reg <- skellam.reg(y, covariate)
-round(reg$param1, 3)   # true values 1 and 0.5
-round(reg$param2, 3)   # true values -0.5 and 0.3
+d <- data.frame(u = rnorm(n), v = rnorm(n))
+d$y <- rpois(n, exp(1 + 0.5 * d$u)) - rpois(n, exp(-0.5 + 0.3 * d$v))
+reg <- skellam.reg(y ~ u | v, data = d)
+summary(reg)   # true values: lambda1 (1, 0.5), lambda2 (-0.5, 0.3)
+```
+
+The fitted probabilities of each value of $y$ add up to one for every observation,
+and the randomized quantile residuals are standard normal when the model is right:
+
+```{r reg-check}
+range(rowSums(predict(reg, type = "prob", at = -60:60)))
+q <- residuals(reg, type = "quantile")
+c(mean = mean(q), sd = sd(q))
 ```
 
 ## Getting help

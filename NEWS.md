@@ -4,6 +4,8 @@
 
 - `skellam.fit()` fits the Skellam distribution to a sample by maximum likelihood (or the method of moments) and returns a `"skellam_fit"` object with standard errors from the observed information. It works with `print()`, `summary()` (estimates, standard errors and confidence intervals, sample versus fitted moments, AIC and BIC), `coef()`, `vcov()`, `logLik()` (hence `AIC()` and `BIC()`), `nobs()`, `confint()`, `predict()` (pmf, cdf or quantiles of the fitted distribution) and `simulate()`. Boundary estimates (one rate 0) are flagged with a warning and `NA` standard errors; `na.rm = TRUE` drops missing values.
 
+- `skellam.reg()` has a formula interface, `skellam.reg(y ~ x1 + x2 | z1, data)`: the part before `|` models `lambda1`, the part after it `lambda2` (one part means the same covariates for both). Factors, transformations and `offset()` terms work as in `glm()`; incomplete rows are removed with a warning. The result is a `"skellam_reg"` object with methods for `print`, `summary`, `coef`, `vcov`, `logLik` (hence `AIC`, `BIC`), `nobs`, `confint`, `fitted`, `residuals` (response, Pearson and randomized quantile residuals), `predict` (mean, rates, or probabilities and cdf at given values, on new data), `simulate`, `anova` (likelihood-ratio tests of nested models) and `update`. The original call `skellam.reg(y, x)` still works and its result still contains `loglik`, `param1` and `param2`.
+
 ## Deprecated
 
 - `skellam.mle()` is deprecated in favour of `skellam.fit()`. It returns the same estimates and its old return value, warns once per session, and will be removed in version 1.0.0.
