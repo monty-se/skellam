@@ -8,3 +8,4 @@ skellam_diagnostics_results.csv
 /Meta/
 /build/
 docs/
+tests/testthat/testthat-problems.rds
