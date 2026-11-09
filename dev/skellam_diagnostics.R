@@ -451,14 +451,15 @@ check("E1", "skellam.reg() leaves the user's warning setting alone (even when it
   cause = "R/skellam.reg.R:69 `options(warn = -1)`.", fix = "Delete the line.")
 options(warn = 0)
 
-check("E4", "the fit is an object that coef() and logLik() understand",
-  run(c(coef = !is.null(coef(skellam.mle(xs))), logLik = inherits(logLik(skellam.mle(xs)), "logLik"))),
+check("E4", "the fit is an object that coef() and logLik() understand (skellam.fit, from 0.3.0)",
+  run(if (exists("skellam.fit")) c(coef = !is.null(coef(skellam.fit(xs))), logLik = inherits(logLik(skellam.fit(xs)), "logLik"))
+      else c(coef = !is.null(coef(skellam.mle(xs))), logLik = inherits(logLik(skellam.mle(xs)), "logLik"))),
   function(v, w) all(v), "coef=TRUE logLik=TRUE",
   why = paste("Functions like coef(), vcov(), logLik(), AIC() and summary() are 'generic': they look",
     "at class(fit) and call the matching method, e.g. logLik.skellam_fit(). A plain list has no",
     "class, so AIC(skellam.mle(x)) is an error and model comparison has to be done by hand. There",
     "are also no standard errors at all."),
-  cause = "R/skellam.mle.R:83 returns list(iters, loglik, param).",
+  cause = "R/skellam.mle.R:83 (0.2.4) returns list(iters, loglik, param). Fixed in 0.3.0 by skellam.fit().",
   fix = paste("Return a classed object with estimates, vcov (from the observed information), loglik,",
     "nobs, and write the methods: this is skellam.fit() in the roadmap. PLANNED FOR 0.3.0: it changes",
     "the return value, so it is deliberately not part of the 0.2.5 bug-fix release."))

@@ -1,5 +1,5 @@
 Package: skellam
-Version: 0.2.5
+Version: 0.2.5.9000
 Title: The Skellam Distribution: Densities, Sampling, Estimation and Regression
 Authors@R: c(person(given = c("Jerry", "W."), family = "Lewis", role = "aut", email = "Jerry.Lewis@biogen.com"),
              person(given = c("Patrick", "E."), family = "Brown", role = "aut", email = "patrick.brown@utoronto.ca"),
@@ -16,8 +16,8 @@ Description: Density, distribution function, quantile function and random
 URL: https://monty-se.github.io/skellam/, https://github.com/monty-se/skellam
 BugReports: https://github.com/monty-se/skellam/issues
 License: GPL (>= 2)
-Imports: stats
-Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
+Imports: stats, utils
+Suggests: ggplot2 (>= 3.4.0), knitr, rmarkdown, testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Encoding: UTF-8

@@ -17,3 +17,7 @@ support_grid <- function(l1, l2, w = 20) {
   s <- sqrt(l1 + l2); m <- l1 - l2
   seq(floor(m - w * s), ceiling(m + w * s))
 }
+
+# skellam.mle() is deprecated (warns once per session); the tests of its
+# results call it through this wrapper, and test-fit.R tests the warning.
+mle_quiet <- function(x) suppressWarnings(skellam.mle(x))

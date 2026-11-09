@@ -6,6 +6,7 @@
 ##                        as base R does when lengths are not multiples
 ##   .skellam_bad_rate()  flag rates that are not finite and non-negative
 ##   .skellam_nonint()    flag values that are not (near-)integers
+##   .skellam_deprecate() once-per-session deprecation warning
 ##
 ## Original author: Montasser Ghachem and Oguz Ersan, 2026
 ## License:         GPL (>= 2)
@@ -35,4 +36,17 @@
 # the tolerance base R uses for dpois() and friends.
 .skellam_nonint <- function(x) {
   is.finite(x) & abs(x - round(x)) > 1e-7 * pmax(1, abs(x))
+}
+
+# Deprecation warning shown once per R session per function, so that a loop
+# calling a deprecated function does not print the same warning thousands of
+# times. .skellam_state$warned records which functions have warned.
+.skellam_state <- new.env(parent = emptyenv())
+.skellam_state$warned <- character()
+.skellam_deprecate <- function(old, new) {
+  if (old %in% .skellam_state$warned) return(invisible())
+  .skellam_state$warned <- c(.skellam_state$warned, old)
+  warning(sprintf("%s is deprecated as of skellam 0.3.0 and will be removed in 1.0.0; use %s instead.\n",
+                  old, new),
+          "This warning is shown once per session.", call. = FALSE)
 }
