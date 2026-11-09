@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">skellam</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +104,7 @@ probabilities;</li>
 <code>rskellam</code> against <code>dskellam</code> with a
 goodness-of-fit test;</li>
 <li>
-<code>skellam.mle</code> and <code>skellam.reg</code> against known
+<code>skellam.fit</code> and <code>skellam.reg</code> against known
 parameters in simulated data.</li>
 </ol>
 <p>Every random number below is drawn after
@@ -230,44 +230,115 @@ from dskellam (points).
 </h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">12</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">8</span><span class="op">)</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/skellam.mle.html">skellam.mle</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span><span class="va">fit</span><span class="op">$</span><span class="va">param</span></span>
-<span><span class="co">#&gt;      mu 1      mu 2 </span></span>
-<span><span class="co">#&gt; 12.065749  8.159249</span></span></code></pre></div>
-<p>At the maximum the fitted mean equals the sample mean, and the
-estimates are close to the true values (12, 8). Samples whose variance
-does not exceed the absolute mean cannot come from a Skellam with two
-positive rates; the estimate then puts one rate at zero instead of
-returning a negative rate:</p>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/skellam.fit.html">skellam.fit</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; skellam.fit(x = x)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Skellam distribution fitted by maximum likelihood (n = 2000)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;         Estimate Std. Error  2.5 % 97.5 %</span></span>
+<span><span class="co">#&gt; lambda1   12.066     0.3276 11.440 12.725</span></span>
+<span><span class="co">#&gt; lambda2    8.159     0.3246  7.547  8.821</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample and fitted moments:</span></span>
+<span><span class="co">#&gt;                    sample   fitted</span></span>
+<span><span class="co">#&gt; mean             3.906500  3.90650</span></span>
+<span><span class="co">#&gt; variance        20.192854 20.22500</span></span>
+<span><span class="co">#&gt; skewness        -0.001085  0.04295</span></span>
+<span><span class="co">#&gt; excess kurtosis -0.014998  0.04944</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; var(x) - |mean(x)| = 16.29 (must be &gt;= 0 for two positive rates)</span></span>
+<span><span class="co">#&gt; log-likelihood -5843.096, AIC 11690.19, BIC 11701.39</span></span></code></pre></div>
+<p>At the maximum the fitted mean equals the sample mean, and the 95%
+confidence intervals cover the true values (12, 8). Samples whose
+variance does not exceed the absolute mean cannot come from a Skellam
+with two positive rates; the estimate then puts one rate at zero, with a
+warning, instead of returning a negative rate:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/skellam.mle.html">skellam.mle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">param</span></span>
-<span><span class="co">#&gt; mu 1 mu 2 </span></span>
-<span><span class="co">#&gt;    3    0</span></span>
-<span><span class="fu"><a href="../reference/skellam.mle.html">skellam.mle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">45</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">param</span></span>
-<span><span class="co">#&gt; mu 1 mu 2 </span></span>
-<span><span class="co">#&gt;  2.1  0.0</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="fu"><a href="../reference/skellam.fit.html">skellam.fit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: the estimate lies on the boundary (a rate is 0): the sample variance</span></span>
+<span><span class="co">#&gt; does not exceed the absolute mean; standard errors are not available</span></span>
+<span><span class="co">#&gt; lambda1 lambda2 </span></span>
+<span><span class="co">#&gt;       3       0</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="fu"><a href="../reference/skellam.fit.html">skellam.fit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">45</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: the estimate lies on the boundary (a rate is 0): the sample variance</span></span>
+<span><span class="co">#&gt; does not exceed the absolute mean; standard errors are not available</span></span>
+<span><span class="co">#&gt; lambda1 lambda2 </span></span>
+<span><span class="co">#&gt;     2.1     0.0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="regression">Regression<a class="anchor" aria-label="anchor" href="#regression"></a>
 </h3>
-<p><code>skellam.reg(y, x)</code> lets both rates depend on covariates
-through a log link. For <span class="math inline">\(y = Y_1 -
-Y_2\)</span>, <code>param1</code> describes the rate of the counts that
-are added (<span class="math inline">\(\lambda_1\)</span>) and
-<code>param2</code> the rate of the counts that are subtracted (<span class="math inline">\(\lambda_2\)</span>).</p>
+<p><code><a href="../reference/skellam.reg.html">skellam.reg()</a></code> lets both rates depend on covariates
+through log links. For <span class="math inline">\(y = Y_1 -
+Y_2\)</span>, the part of the formula before <code>|</code> is the model
+for <span class="math inline">\(\lambda_1\)</span> (the counts that are
+added) and the part after it the model for <span class="math inline">\(\lambda_2\)</span> (the counts that are
+subtracted).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
-<span><span class="va">covariate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="va">n</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">covariate</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="va">n</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="va">covariate</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">reg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/skellam.reg.html">skellam.reg</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">covariate</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">reg</span><span class="op">$</span><span class="va">param1</span>, <span class="fl">3</span><span class="op">)</span>   <span class="co"># true values 1 and 0.5</span></span>
-<span><span class="co">#&gt;             Estimate Std. Error Wald value p-value</span></span>
-<span><span class="co">#&gt; (Intercept)    0.982      0.031     31.615       0</span></span>
-<span><span class="co">#&gt; x              0.520      0.026     19.876       0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">reg</span><span class="op">$</span><span class="va">param2</span>, <span class="fl">3</span><span class="op">)</span>   <span class="co"># true values -0.5 and 0.3</span></span>
-<span><span class="co">#&gt;             Estimate Std. Error Wald value p-value</span></span>
-<span><span class="co">#&gt; (Intercept)   -0.550      0.118     -4.650   0.000</span></span>
-<span><span class="co">#&gt; x              0.329      0.110      2.975   0.003</span></span></code></pre></div>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">d</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="va">n</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">d</span><span class="op">$</span><span class="va">u</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="va">n</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="va">d</span><span class="op">$</span><span class="va">v</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">reg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/skellam.reg.html">skellam.reg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">u</span> <span class="op">|</span> <span class="va">v</span>, data <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">reg</span><span class="op">)</span>   <span class="co"># true values: lambda1 (1, 0.5), lambda2 (-0.5, 0.3)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; skellam.reg(formula = y ~ u | v, data = d)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; log(lambda1): rate of the counts that are added</span></span>
+<span><span class="co">#&gt;             Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; (Intercept)  1.00026    0.03033   32.98   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; u            0.46286    0.02096   22.09   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; log(lambda2): rate of the counts that are subtracted</span></span>
+<span><span class="co">#&gt;             Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; (Intercept) -0.53322    0.11106  -4.801 1.58e-06 ***</span></span>
+<span><span class="co">#&gt; v            0.30633    0.07993   3.832 0.000127 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; n = 1000, residual df = 996, log-likelihood -2010.799, AIC 4029.599, BIC 4049.23</span></span></code></pre></div>
+<p>The fitted probabilities of each value of <span class="math inline">\(y\)</span> add up to one for every observation,
+and the randomized quantile residuals are standard normal when the model
+is right:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">reg</span>, type <span class="op">=</span> <span class="st">"prob"</span>, at <span class="op">=</span> <span class="op">-</span><span class="fl">60</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 1 1</span></span>
+<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">reg</span>, type <span class="op">=</span> <span class="st">"quantile"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          mean            sd </span></span>
+<span><span class="co">#&gt; -0.0005193708  0.9944568499</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="diagnostic-plots">5. Diagnostic plots<a class="anchor" aria-label="anchor" href="#diagnostic-plots"></a>
+</h2>
+<p>With ggplot2 installed, <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> compares the data with
+the fit. The hanging rootogram shows the square roots of the observed
+counts as bars hanging from the square roots of the expected counts;
+bars that end near zero mean the model fits. A sample with 60 extra
+zeros shows up as a bar reaching far below zero at 0.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">6</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">440</span>, <span class="fl">6</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">440</span>, <span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/skellam.fit.html">skellam.fit</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="validate_skellam_files/figure-html/plots-1.png" class="r-plt" alt="Hanging rootograms for a Skellam sample (first) and for the same kind of sample with 60 extra zeros (second)." width="100%"><p class="caption">
+Hanging rootograms for a Skellam sample (first) and for the same kind of
+sample with 60 extra zeros (second).
+</p>
+</div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/skellam.fit.html">skellam.fit</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="validate_skellam_files/figure-html/plots-2.png" class="r-plt" alt="Hanging rootograms for a Skellam sample (first) and for the same kind of sample with 60 extra zeros (second)." width="100%"><p class="caption">
+Hanging rootograms for a Skellam sample (first) and for the same kind of
+sample with 60 extra zeros (second).
+</p>
 </div>
 </div>
 <div class="section level2">

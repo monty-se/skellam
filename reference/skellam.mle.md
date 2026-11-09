@@ -1,4 +1,4 @@
-# Maximum Likelihood Estimation for the Skellam Distribution
+# Maximum Likelihood Estimation for the Skellam Distribution (deprecated)
 
 Estimates the parameters of a Skellam distribution using maximum
 likelihood.
@@ -32,6 +32,13 @@ A list with components:
   Estimated parameters (\\\hat{\lambda}\_1\\, \\\hat{\lambda}\_2\\).
 
 ## Details
+
+**Deprecated:** use
+[`skellam.fit`](https://monty-se.github.io/skellam/reference/skellam.fit.md),
+which returns a fitted-model object with standard errors and works with
+`coef`, `vcov`, `logLik`, `AIC`, `confint` and `summary`. `skellam.mle`
+gives the same estimates, keeps its old return value, and warns once per
+session. It will be removed in version 1.0.0.
 
 At the maximum likelihood estimate the fitted mean equals the sample
 mean, \\\hat\lambda_1 - \hat\lambda_2 = \bar{x}\\, so the function
@@ -88,6 +95,8 @@ x1 <- rpois(1000, 10)
 x2 <- rpois(1000, 6)
 x <- x1 - x2
 skellam.mle(x)
+#> Warning: skellam.mle() is deprecated as of skellam 0.3.0 and will be removed in 1.0.0; use skellam.fit() instead.
+#> This warning is shown once per session.
 #> $iters
 #> [1] 25
 #> 

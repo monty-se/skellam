@@ -59,24 +59,30 @@ pskellam(0, 1e6, 1e6)
 
 set.seed(1)
 x <- rpois(2000, 12) - rpois(2000, 8)
-skellam.mle(x)$param                     # close to (12, 8)
+fit <- skellam.fit(x)
+summary(fit)                             # estimates close to (12, 8), with SEs and CIs
+AIC(fit); confint(fit)
+skellam.test(x)                          # goodness of fit (parametric bootstrap)
+plot(fit)                                # hanging rootogram (needs ggplot2)
 ```
 
 ### Regression
 
 For `y = Y1 - Y2`, both rates follow a log-linear model in the
-covariates. `param1` describes the rate of the counts that are added and
-`param2` the rate of the counts that are subtracted.
+covariates. In the formula, the part before `|` is the model for
+`lambda1` (the rate of the counts that are added) and the part after it
+the model for `lambda2` (the counts that are subtracted).
 
 ``` r
 
 set.seed(123)
 n <- 1000
-covariate <- rnorm(n)
-y <- rpois(n, exp(1 + 0.5 * covariate)) - rpois(n, exp(-0.5 + 0.3 * covariate))
-fit <- skellam.reg(y, covariate)
-fit$param1                               # intercept ~ 1,    slope ~ 0.5
-fit$param2                               # intercept ~ -0.5, slope ~ 0.3
+d <- data.frame(attack = rnorm(n), defence = rnorm(n))
+d$goaldiff <- rpois(n, exp(1 + 0.5 * d$attack)) - rpois(n, exp(-0.5 + 0.3 * d$defence))
+m <- skellam.reg(goaldiff ~ attack | defence, data = d)
+summary(m)                               # lambda1: ~ (1, 0.5); lambda2: ~ (-0.5, 0.3)
+anova(skellam.reg(goaldiff ~ 1 | 1, data = d), m)   # likelihood-ratio test
+predict(m, newdata = data.frame(attack = 1, defence = 0), type = "prob", at = -2:2)
 ```
 
 > **Note for users of version 0.2.4 or earlier:** in those versions

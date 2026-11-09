@@ -1,5 +1,87 @@
 # Changelog
 
+## skellam (development version)
+
+### New features
+
+- [`skellam.fit()`](https://monty-se.github.io/skellam/reference/skellam.fit.md)
+  fits the Skellam distribution to a sample by maximum likelihood (or
+  the method of moments) and returns a `"skellam_fit"` object with
+  standard errors from the observed information. It works with
+  [`print()`](https://rdrr.io/r/base/print.html),
+  [`summary()`](https://rdrr.io/r/base/summary.html) (estimates,
+  standard errors and confidence intervals, sample versus fitted
+  moments, AIC and BIC), [`coef()`](https://rdrr.io/r/stats/coef.html),
+  [`vcov()`](https://rdrr.io/r/stats/vcov.html),
+  [`logLik()`](https://rdrr.io/r/stats/logLik.html) (hence
+  [`AIC()`](https://rdrr.io/r/stats/AIC.html) and
+  [`BIC()`](https://rdrr.io/r/stats/AIC.html)),
+  [`nobs()`](https://rdrr.io/r/stats/nobs.html),
+  [`confint()`](https://rdrr.io/r/stats/confint.html),
+  [`predict()`](https://rdrr.io/r/stats/predict.html) (pmf, cdf or
+  quantiles of the fitted distribution) and
+  [`simulate()`](https://rdrr.io/r/stats/simulate.html). Boundary
+  estimates (one rate 0) are flagged with a warning and `NA` standard
+  errors; `na.rm = TRUE` drops missing values.
+
+- [`skellam.reg()`](https://monty-se.github.io/skellam/reference/skellam.reg.md)
+  has a formula interface, `skellam.reg(y ~ x1 + x2 | z1, data)`: the
+  part before `|` models `lambda1`, the part after it `lambda2` (one
+  part means the same covariates for both). Factors, transformations and
+  [`offset()`](https://rdrr.io/r/stats/offset.html) terms work as in
+  [`glm()`](https://rdrr.io/r/stats/glm.html); incomplete rows are
+  removed with a warning. The result is a `"skellam_reg"` object with
+  methods for `print`, `summary`, `coef`, `vcov`, `logLik` (hence `AIC`,
+  `BIC`), `nobs`, `confint`, `fitted`, `residuals` (response, Pearson
+  and randomized quantile residuals), `predict` (mean, rates, or
+  probabilities and cdf at given values, on new data), `simulate`,
+  `anova` (likelihood-ratio tests of nested models) and `update`. The
+  original call `skellam.reg(y, x)` still works and its result still
+  contains `loglik`, `param1` and `param2`.
+
+- [`skellam.moments()`](https://monty-se.github.io/skellam/reference/skellam.moments.md)
+  returns the mean, variance, standard deviation, skewness and excess
+  kurtosis, and the cumulants, raw and central moments of any order;
+  [`skellam.mgf()`](https://monty-se.github.io/skellam/reference/skellam.moments.md),
+  [`skellam.cf()`](https://monty-se.github.io/skellam/reference/skellam.moments.md)
+  and
+  [`skellam.pgf()`](https://monty-se.github.io/skellam/reference/skellam.moments.md)
+  are the moment, characteristic and probability generating functions.
+
+- [`skellam.test()`](https://monty-se.github.io/skellam/reference/skellam.test.md)
+  tests goodness of fit with the Pearson chi-squared or likelihood-ratio
+  statistic on cells merged to a minimum expected count. With estimated
+  rates the default p-value comes from a parametric bootstrap (refitting
+  each simulated sample), because no chi-squared reference is exact in
+  that case (Chernoff and Lehmann, 1954); an asymptotic chi-squared
+  p-value is available. Returns an `"htest"` object.
+
+- Diagnostic plots for
+  [`skellam.fit()`](https://monty-se.github.io/skellam/reference/skellam.fit.md)
+  and
+  [`skellam.reg()`](https://monty-se.github.io/skellam/reference/skellam.reg.md)
+  fits: [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  draw a hanging rootogram (default), observed versus fitted
+  probabilities, a PIT histogram for count data, or a normal QQ plot of
+  randomized quantile residuals. All are ggplot2 objects that can be
+  modified with `+`; ggplot2 is suggested, not required.
+  [`theme_skellam()`](https://monty-se.github.io/skellam/reference/skellam_palette.md),
+  [`skellam_palette()`](https://monty-se.github.io/skellam/reference/skellam_palette.md)
+  (colour-blind-safe Okabe-Ito colours),
+  [`scale_colour_skellam()`](https://monty-se.github.io/skellam/reference/skellam_palette.md)
+  and
+  [`scale_fill_skellam()`](https://monty-se.github.io/skellam/reference/skellam_palette.md)
+  give other figures the same look.
+
+### Deprecated
+
+- [`skellam.mle()`](https://monty-se.github.io/skellam/reference/skellam.mle.md)
+  is deprecated in favour of
+  [`skellam.fit()`](https://monty-se.github.io/skellam/reference/skellam.fit.md).
+  It returns the same estimates and its old return value, warns once per
+  session, and will be removed in version 1.0.0.
+
 ## skellam 0.2.5
 
 ### Breaking change
