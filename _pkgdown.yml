@@ -35,11 +35,16 @@ reference:
   - skellam
 - title: Estimation
   desc: >
-    Maximum likelihood estimation from a sample of differences, and regression
-    with covariates on both rates.
+    Fitting the distribution to a sample of differences, and regression with
+    covariates on both rates.
+  contents:
+  - skellam.fit
+  - skellam.reg
+- title: Deprecated
+  desc: >
+    Kept for backward compatibility until version 1.0.0.
   contents:
   - skellam.mle
-  - skellam.reg
 
 articles:
 - title: Articles

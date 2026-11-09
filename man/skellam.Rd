@@ -142,6 +142,6 @@ between two Poisson variates. \emph{Statistica Neerlandica} 16(1), 17-23.
 }
 }
 \seealso{
-\code{\link{skellam.mle}} and \code{\link{skellam.reg}} for
+\code{\link{skellam.fit}} and \code{\link{skellam.reg}} for
 estimation; \code{\link{dpois}} for the Poisson distribution.
 }

@@ -32,7 +32,7 @@ that definition and with each other:
 1. `dskellam` against an exact sum over Poisson probabilities;
 2. `pskellam` against cumulative sums of `dskellam`, and `qskellam` as its inverse;
 3. `rskellam` against `dskellam` with a goodness-of-fit test;
-4. `skellam.mle` and `skellam.reg` against known parameters in simulated data.
+4. `skellam.fit` and `skellam.reg` against known parameters in simulated data.
 
 Every random number below is drawn after `set.seed(20261108)`, so the output is the
 same each time the vignette is built.
@@ -134,18 +134,18 @@ legend("topright", c("rskellam", "N * dskellam"), lwd = c(6, NA), pch = c(NA, 19
 
 ```{r mle}
 x <- rpois(2000, 12) - rpois(2000, 8)
-fit <- skellam.mle(x)
-fit$param
+fit <- skellam.fit(x)
+summary(fit)
 ```
 
-At the maximum the fitted mean equals the sample mean, and the estimates are close
-to the true values (12, 8). Samples whose variance does not exceed the absolute
-mean cannot come from a Skellam with two positive rates; the estimate then puts one
-rate at zero instead of returning a negative rate:
+At the maximum the fitted mean equals the sample mean, and the 95% confidence
+intervals cover the true values (12, 8). Samples whose variance does not exceed the
+absolute mean cannot come from a Skellam with two positive rates; the estimate then
+puts one rate at zero, with a warning, instead of returning a negative rate:
 
 ```{r mle-boundary}
-skellam.mle(rep(3, 50))$param
-skellam.mle(c(rep(2, 45), rep(3, 5)))$param
+coef(skellam.fit(rep(3, 50)))
+coef(skellam.fit(c(rep(2, 45), rep(3, 5))))
 ```
 
 ### Regression

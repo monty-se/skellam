@@ -53,7 +53,9 @@ pskellam(0, 1e6, 1e6)
 ```r
 set.seed(1)
 x <- rpois(2000, 12) - rpois(2000, 8)
-skellam.mle(x)$param                     # close to (12, 8)
+fit <- skellam.fit(x)
+summary(fit)                             # estimates close to (12, 8), with SEs and CIs
+AIC(fit); confint(fit)
 ```
 
 ### Regression
