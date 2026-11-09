@@ -172,6 +172,20 @@ q <- residuals(reg, type = "quantile")
 c(mean = mean(q), sd = sd(q))
 ```
 
+## 5. Diagnostic plots
+
+With ggplot2 installed, `plot()` compares the data with the fit. The hanging
+rootogram shows the square roots of the observed counts as bars hanging from the
+square roots of the expected counts; bars that end near zero mean the model fits.
+A sample with 60 extra zeros shows up as a bar reaching far below zero at 0.
+
+```{r plots, eval = requireNamespace("ggplot2", quietly = TRUE), fig.cap = "Hanging rootograms for a Skellam sample (first) and for the same kind of sample with 60 extra zeros (second)."}
+x0 <- rpois(500, 6) - rpois(500, 4)
+x1 <- c(rpois(440, 6) - rpois(440, 4), rep(0, 60))
+plot(skellam.fit(x0))
+plot(skellam.fit(x1))
+```
+
 ## Getting help
 
 If you find a bug, please file an issue with a minimal reproducible example on

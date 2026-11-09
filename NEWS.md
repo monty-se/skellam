@@ -9,6 +9,8 @@
 - `skellam.moments()` returns the mean, variance, standard deviation, skewness and excess kurtosis, and the cumulants, raw and central moments of any order; `skellam.mgf()`, `skellam.cf()` and `skellam.pgf()` are the moment, characteristic and probability generating functions.
 - `skellam.test()` tests goodness of fit with the Pearson chi-squared or likelihood-ratio statistic on cells merged to a minimum expected count. With estimated rates the default p-value comes from a parametric bootstrap (refitting each simulated sample), because no chi-squared reference is exact in that case (Chernoff and Lehmann, 1954); an asymptotic chi-squared p-value is available. Returns an `"htest"` object.
 
+- Diagnostic plots for `skellam.fit()` and `skellam.reg()` fits: `plot()` and `autoplot()` draw a hanging rootogram (default), observed versus fitted probabilities, a PIT histogram for count data, or a normal QQ plot of randomized quantile residuals. All are ggplot2 objects that can be modified with `+`; ggplot2 is suggested, not required. `theme_skellam()`, `skellam_palette()` (colour-blind-safe Okabe-Ito colours), `scale_colour_skellam()` and `scale_fill_skellam()` give other figures the same look.
+
 ## Deprecated
 
 - `skellam.mle()` is deprecated in favour of `skellam.fit()`. It returns the same estimates and its old return value, warns once per session, and will be removed in version 1.0.0.

@@ -56,6 +56,8 @@ x <- rpois(2000, 12) - rpois(2000, 8)
 fit <- skellam.fit(x)
 summary(fit)                             # estimates close to (12, 8), with SEs and CIs
 AIC(fit); confint(fit)
+skellam.test(x)                          # goodness of fit (parametric bootstrap)
+plot(fit)                                # hanging rootogram (needs ggplot2)
 ```
 
 ### Regression

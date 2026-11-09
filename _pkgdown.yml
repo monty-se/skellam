@@ -52,6 +52,13 @@ reference:
     Testing whether a sample comes from a Skellam distribution.
   contents:
   - skellam.test
+- title: Diagnostic plots
+  desc: >
+    Rootograms, PIT histograms and quantile-residual plots comparing data with
+    a fit, and the package's ggplot2 theme and colours.
+  contents:
+  - skellam-plots
+  - skellam_palette
 - title: Deprecated
   desc: >
     Kept for backward compatibility until version 1.0.0.
