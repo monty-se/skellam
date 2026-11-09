@@ -13,3 +13,5 @@
 ^docs$
 ^pkgdown$
 ^tests/testthat/testthat-problems\.rds$
+^data-raw$
+^vignettes/articles$
