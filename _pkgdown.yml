@@ -33,6 +33,12 @@ reference:
     with saddlepoint approximations to the density and distribution function.
   contents:
   - skellam
+- title: Moments and generating functions
+  desc: >
+    Theoretical moments and cumulants of any order, and the moment,
+    characteristic and probability generating functions.
+  contents:
+  - skellam.moments
 - title: Estimation
   desc: >
     Fitting the distribution to a sample of differences, and regression with
@@ -41,6 +47,11 @@ reference:
   - skellam.fit
   - skellam.reg
   - skellam_reg-methods
+- title: Goodness of fit
+  desc: >
+    Testing whether a sample comes from a Skellam distribution.
+  contents:
+  - skellam.test
 - title: Deprecated
   desc: >
     Kept for backward compatibility until version 1.0.0.

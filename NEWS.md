@@ -6,6 +6,9 @@
 
 - `skellam.reg()` has a formula interface, `skellam.reg(y ~ x1 + x2 | z1, data)`: the part before `|` models `lambda1`, the part after it `lambda2` (one part means the same covariates for both). Factors, transformations and `offset()` terms work as in `glm()`; incomplete rows are removed with a warning. The result is a `"skellam_reg"` object with methods for `print`, `summary`, `coef`, `vcov`, `logLik` (hence `AIC`, `BIC`), `nobs`, `confint`, `fitted`, `residuals` (response, Pearson and randomized quantile residuals), `predict` (mean, rates, or probabilities and cdf at given values, on new data), `simulate`, `anova` (likelihood-ratio tests of nested models) and `update`. The original call `skellam.reg(y, x)` still works and its result still contains `loglik`, `param1` and `param2`.
 
+- `skellam.moments()` returns the mean, variance, standard deviation, skewness and excess kurtosis, and the cumulants, raw and central moments of any order; `skellam.mgf()`, `skellam.cf()` and `skellam.pgf()` are the moment, characteristic and probability generating functions.
+- `skellam.test()` tests goodness of fit with the Pearson chi-squared or likelihood-ratio statistic on cells merged to a minimum expected count. With estimated rates the default p-value comes from a parametric bootstrap (refitting each simulated sample), because no chi-squared reference is exact in that case (Chernoff and Lehmann, 1954); an asymptotic chi-squared p-value is available. Returns an `"htest"` object.
+
 ## Deprecated
 
 - `skellam.mle()` is deprecated in favour of `skellam.fit()`. It returns the same estimates and its old return value, warns once per session, and will be removed in version 1.0.0.
