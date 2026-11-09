@@ -1,7 +1,3 @@
-# skellam (development version)
-
-- The package has a website, <https://monty-se.github.io/skellam/>, built with pkgdown and published by GitHub Actions; its address is in `DESCRIPTION` and the README.
-
 # skellam 0.2.5
 
 ## Breaking change
@@ -39,6 +35,7 @@
 
 ## Infrastructure
 
+- The package has a website, <https://monty-se.github.io/skellam/>, built with pkgdown and published by GitHub Actions; its address is in `DESCRIPTION` and the README.
 - Added a testthat test suite (`tests/testthat/`) replacing `tests/skellam.R`, which only drew plots.
 - Added `dev/skellam_diagnostics.R`, an annotated health check of the package.
 - Removed build artefacts (`doc/`, `Meta/`, `build/`, `.Rproj.user/`) from version control; installing from a clone failed because of them.
