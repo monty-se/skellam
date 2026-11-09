@@ -2,7 +2,8 @@
 ## skellam.mle.R -- Maximum likelihood estimation
 ##
 ## Public functions:
-##   skellam.mle()   MLE of (lambda1, lambda2) from a sample of differences
+##   skellam.mle()   MLE of (lambda1, lambda2) from a sample of differences;
+##                   deprecated in favour of skellam.fit() (kept until 1.0.0)
 ##
 ## Original author: Michail Tsagris
 ## Corrections:     Montasser Ghachem and Oguz Ersan, 2026
@@ -10,9 +11,15 @@
 ## Package:         skellam, https://github.com/monty-se/skellam
 ## --------------------------------------------------------------------------
 
-#' Maximum Likelihood Estimation for the Skellam Distribution
+#' Maximum Likelihood Estimation for the Skellam Distribution (deprecated)
 #'
 #' Estimates the parameters of a Skellam distribution using maximum likelihood.
+#'
+#' \strong{Deprecated:} use \code{\link{skellam.fit}}, which returns a
+#' fitted-model object with standard errors and works with \code{coef},
+#' \code{vcov}, \code{logLik}, \code{AIC}, \code{confint} and \code{summary}.
+#' \code{skellam.mle} gives the same estimates, keeps its old return value,
+#' and warns once per session. It will be removed in version 1.0.0.
 #'
 #' @param x A vector of integers (positive or negative).
 #'
@@ -85,43 +92,10 @@
 #' @author Michail Tsagris
 #' @export
 skellam.mle <- function(x) {
-
-  if (!is.numeric(x)) stop("'x' must be a numeric vector of integers")
-  if (anyNA(x)) stop("'x' contains missing values; remove them before fitting")
-  if (any(!is.finite(x)) || any(.skellam_nonint(x)))
-    stop("'x' must contain finite integers (differences of counts)")
-  n <- length(x)
-  if (n < 2L) stop("at least two observations are needed")
-  x <- round(x)
-  mx <- mean(x)
-
-  # Profile log-likelihood in lambda2, with lambda1 = lambda2 + mean(x)
-  # (the MLE matches the sample mean). Both rates must be >= 0, so
-  # lambda2 >= lo = max(0, -mean(x)). theta = lambda2 - lo >= 0.
-  lo <- max(0, -mx)
-  evals <- 0L
-  prof <- function(theta) {
-    evals <<- evals + 1L
-    l2 <- lo + theta
-    sum(dskellam(x, l2 + mx, l2, log = TRUE))
-  }
-
-  # Search interval: the moment estimate of lambda2 is (var - mean)/2; the
-  # optimum lies well inside [0, 10 * (var + |mean|) + 1].
-  upper <- 10 * (stats::var(x) + abs(mx)) + 1
-  opt <- stats::optimize(prof, c(0, upper), maximum = TRUE, tol = 1e-10 * (1 + upper))
-  # optimize() never evaluates the end points; the MLE can sit on theta = 0
-  # (one rate zero), e.g. for samples with var(x) <= |mean(x)|.
-  at0 <- prof(0)
-  if (at0 >= opt$objective) {
-    theta <- 0; loglik <- at0
-  } else {
-    theta <- opt$maximum; loglik <- opt$objective
-  }
-
-  l2 <- lo + theta
-  param <- c(l2 + mx, l2)
+  .skellam_deprecate("skellam.mle()", "skellam.fit()")
+  x <- .skellam_check_sample(x)
+  est <- .skellam_profile_mle(x)
+  param <- unname(est$lambda)
   names(param) <- c("mu 1", "mu 2")
-  list(iters = evals, loglik = loglik, param = param)
-
+  list(iters = est$evals, loglik = est$loglik, param = param)
 }

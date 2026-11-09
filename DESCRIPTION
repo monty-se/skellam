@@ -1,5 +1,5 @@
 Package: skellam
-Version: 0.2.5
+Version: 0.2.5.9000
 Title: The Skellam Distribution: Densities, Sampling, Estimation and Regression
 Authors@R: c(person(given = c("Jerry", "W."), family = "Lewis", role = "aut", email = "Jerry.Lewis@biogen.com"),
              person(given = c("Patrick", "E."), family = "Brown", role = "aut", email = "patrick.brown@utoronto.ca"),

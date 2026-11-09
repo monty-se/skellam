@@ -2,7 +2,7 @@
 % Please edit documentation in R/skellam.mle.R
 \name{skellam.mle}
 \alias{skellam.mle}
-\title{Maximum Likelihood Estimation for the Skellam Distribution}
+\title{Maximum Likelihood Estimation for the Skellam Distribution (deprecated)}
 \usage{
 skellam.mle(x)
 }
@@ -21,6 +21,12 @@ A list with components:
 Estimates the parameters of a Skellam distribution using maximum likelihood.
 }
 \details{
+\strong{Deprecated:} use \code{\link{skellam.fit}}, which returns a
+fitted-model object with standard errors and works with \code{coef},
+\code{vcov}, \code{logLik}, \code{AIC}, \code{confint} and \code{summary}.
+\code{skellam.mle} gives the same estimates, keeps its old return value,
+and warns once per session. It will be removed in version 1.0.0.
+
 At the maximum likelihood estimate the fitted mean equals the sample mean,
 \eqn{\hat\lambda_1 - \hat\lambda_2 = \bar{x}}{lambda1 - lambda2 = mean(x)}, so the
 function maximizes the profile log-likelihood over \eqn{\lambda_2}{lambda2} alone,
