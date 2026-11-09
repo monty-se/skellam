@@ -13,14 +13,20 @@ all exported functions.
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 note
+
+* checking CRAN incoming feasibility ... NOTE
+  Possibly misspelled words in DESCRIPTION: saddlepoint (13:5)
+
+  "saddlepoint" is the standard technical term for the saddlepoint
+  approximation (Daniels, 1954; Butler, 2007), not a misspelling.
 
 ## Test environments
 
+- local: Windows 11, R 4.6.2 (devtools::check(): 0 errors, 0 warnings, 0 notes)
 - local: Ubuntu 24.04, R 4.3.3
+- win-builder: R-devel (2026-11-07 r90850), Windows Server 2022
 - GitHub Actions: macOS (release), Windows (release), Ubuntu (devel, release, oldrel-1)
-- R-hub: linux, windows, macos (R-devel)
-- win-builder: R-devel
 
 ## Downstream dependencies
 
